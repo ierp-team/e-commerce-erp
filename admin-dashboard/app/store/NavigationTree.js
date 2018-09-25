@@ -23,6 +23,16 @@
                 //rowCls: 'nav-tree-badge nav-tree-badge-new',
                 viewType: 'order',
                 leaf: true
+            },{
+                text:'员工管理模块',
+                iconCls:'x-fa fa-users',
+                viewType:'user',
+                leaf:true
+            },{
+                text:'权限管理模块',
+                iconCls:'x-fa fa-gear',
+                viewType:'permission',
+                leaf:true
             }
         ]
     }
