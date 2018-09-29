@@ -1,4 +1,4 @@
-package com.ierp.vendor.domain;
+package com.ierp.vendormodule.vendor.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,9 +1,9 @@
-package com.ierp.vendor.repository;
+package com.ierp.vendormodule.vendor.repository;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.ierp.vendor.domain.Vendor;
+import com.ierp.vendormodule.vendor.domain.Vendor;
 
 
 

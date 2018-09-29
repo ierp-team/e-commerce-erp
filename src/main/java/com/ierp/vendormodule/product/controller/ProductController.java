@@ -1,4 +1,4 @@
-package com.ierp.product.controller;
+package com.ierp.vendormodule.product.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ierp.common.beans.BeanUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
-import com.ierp.product.domain.Product;
+import com.ierp.vendormodule.product.domain.Product;
 //import com.ierp.product.domain.ProductQueryDTO;
-import com.ierp.product.service.IProductService;
+import com.ierp.vendormodule.product.service.IProductService;
 
 @RestController
 @RequestMapping("/product")

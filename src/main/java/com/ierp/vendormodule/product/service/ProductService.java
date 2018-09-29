@@ -1,4 +1,4 @@
-package com.ierp.product.service;
+package com.ierp.vendormodule.product.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.ierp.product.domain.Product;
-import com.ierp.product.repository.ProductRepository;
+import com.ierp.vendormodule.product.domain.Product;
+import com.ierp.vendormodule.product.repository.ProductRepository;
 
 @Service
 @Transactional

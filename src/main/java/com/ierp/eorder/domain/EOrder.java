@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ierp.expressco.domain.Expressco;
 
 /**
  * @author ghb, Date:Sep 26, 2018  3:34:16 PM
@@ -38,7 +39,8 @@ public class EOrder {
     //物流信息
     private Date diliverTime;
     private String expressNumber;   
-    private String logisticsCompany;
+    private Expressco logisticsCompany;
+    
     private Float freight;
     private String logisticsInformation;
     
@@ -101,7 +103,7 @@ public class EOrder {
         return expressNumber;
     }
 
-    public String getLogisticsCompany() {
+    public Expressco getLogisticsCompany() {
         return logisticsCompany;
     }
 
@@ -172,10 +174,9 @@ public class EOrder {
         this.expressNumber = expressNumber;
     }
 
-    public void setLogisticsCompany(String logisticsCompany) {
+    public void setLogisticsCompany(Expressco logisticsCompany) {
         this.logisticsCompany = logisticsCompany;
     }
-
     public void setFreight(Float freight) {
         this.freight = freight;
     }

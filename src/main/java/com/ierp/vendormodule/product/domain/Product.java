@@ -1,4 +1,4 @@
-package com.ierp.product.domain;
+package com.ierp.vendormodule.product.domain;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.ierp.vendor.domain.Vendor;
+import com.ierp.vendormodule.vendor.domain.Vendor;
 
 @Entity
 @Table(name="t_vendor_product")
