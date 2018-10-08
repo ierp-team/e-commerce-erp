@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ierp.eordermodule.eorder.domain.EOrder;
-import com.ierp.eordermodule.eorder.domain.EOrderProduct;
+import com.ierp.eordermodule.eorderproduct.domain.EOrderProduct;
 import com.ierp.eordermodule.eorder.service.IEOrderService;
 import com.ierp.eordermodule.util.EOrderStatus;
 import com.ierp.goods.service.IGoodsService;
