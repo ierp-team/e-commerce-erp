@@ -12,8 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ierp.expressco.domain.Expressco;
+
 /**
- * @author ghb, Date:Sep 26, 20183:34:16 PM
+ * @author ghb, Date:Sep 26, 2018  3:34:16 PM
  *
  */
 @Entity
@@ -34,14 +37,20 @@ public class EOrder {
     //订单状态
     private String orderStatus;
     //物流信息
+    private Date diliverTime;
     private String expressNumber;   
-    private String logisticsCompany;
+    private Expressco logisticsCompany;
+    
     private Float freight;
     private String logisticsInformation;
     
     private List<EOrderPoduct> orderProducts= new ArrayList<EOrderPoduct>();
+    
+    
+    private String userId;//启动流程的用户ID
+    private String processInstanceId;//流程实例Id：用于关联流程引擎相关数据,没有启动流程之前为""
+    
     //getters
-
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     public Long getId() {
@@ -55,11 +64,13 @@ public class EOrder {
     public String getSalePlatform() {
         return salePlatform;
     }
-
+    
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
     public Date getCreateTime() {
         return createTime;
     }
 
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
     public Date getOverTime() {
         return overTime;
     }
@@ -83,12 +94,16 @@ public class EOrder {
     public String getOrderStatus() {
         return orderStatus;
     }
-
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
+    public Date getDiliverTime() {
+        return diliverTime;
+    }
+    
     public String getExpressNumber() {
         return expressNumber;
     }
 
-    public String getLogisticsCompany() {
+    public Expressco getLogisticsCompany() {
         return logisticsCompany;
     }
 
@@ -102,6 +117,12 @@ public class EOrder {
     @OneToMany(mappedBy="eOrder" ,cascade=CascadeType.ALL)  
     public List<EOrderPoduct> getOrderProducts() {
         return orderProducts;
+    }
+    public String getUserId() {
+        return userId;
+    }
+    public String getProcessInstanceId() {
+        return processInstanceId;
     }
     //setters
 
@@ -144,15 +165,18 @@ public class EOrder {
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
+    
+    public void setDiliverTime(Date diliverTime) {
+        this.diliverTime = diliverTime;
+    }
 
     public void setExpressNumber(String expressNumber) {
         this.expressNumber = expressNumber;
     }
 
-    public void setLogisticsCompany(String logisticsCompany) {
+    public void setLogisticsCompany(Expressco logisticsCompany) {
         this.logisticsCompany = logisticsCompany;
     }
-
     public void setFreight(Float freight) {
         this.freight = freight;
     }
@@ -164,5 +188,11 @@ public class EOrder {
     public void setOrderProducts(List<EOrderPoduct> orderProducts) {
         this.orderProducts = orderProducts;
     }
-    
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
 }
