@@ -10,17 +10,26 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GeneratorType;
 
+import com.ierp.eorder.util.EOrderProductStatus;
+import com.ierp.goods.domain.Goods;
+
 /**
  * @author ghb, Date:Sep 26, 20183:58:56 PM
  *
  */
 @Entity
 @Table(name="t_eorder_product")
-public class EOrderPoduct {
+public class EOrderProduct {
     private Long id;
     private Integer quantity;
     private Float totalPrice;
+    
+    private EOrderProductStatus orderProductStatus;
+    
+ 
+    
     private EOrder eOrder;
+    private Goods good;
     //getters
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -38,6 +47,14 @@ public class EOrderPoduct {
     public EOrder geteOrder() {
         return eOrder;
     }
+    @ManyToOne(cascade=CascadeType.ALL)
+    public Goods getGood() {
+        return good;
+    }
+    public EOrderProductStatus getOrderProductStatus() {
+        return orderProductStatus;
+    }
+    
     //setters
     public void setId(Long id) {
         this.id = id;
@@ -51,5 +68,10 @@ public class EOrderPoduct {
     public void seteOrder(EOrder eOrder) {
         this.eOrder = eOrder;
     }
-    
+    public void setGood(Goods good) {
+        this.good = good;
+    }
+    public void setOrderProductStatus(EOrderProductStatus orderProductStatus) {
+        this.orderProductStatus = orderProductStatus;
+    }
 }

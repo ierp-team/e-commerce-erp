@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ierp.eorder.util.EOrderStatus;
 import com.ierp.expressco.domain.Expressco;
 
 /**
@@ -35,7 +36,7 @@ public class EOrder {
     private String contact;
     private String phone;
     //订单状态
-    private String orderStatus;
+    private EOrderStatus orderStatus;
     //物流信息
     private Date diliverTime;
     private String expressNumber;   
@@ -44,7 +45,7 @@ public class EOrder {
     private Float freight;
     private String logisticsInformation;
     
-    private List<EOrderPoduct> orderProducts= new ArrayList<EOrderPoduct>();
+    private List<EOrderProduct> orderProducts= new ArrayList<EOrderProduct>();
     
     
     private String userId;//启动流程的用户ID
@@ -91,7 +92,7 @@ public class EOrder {
         return phone;
     }
 
-    public String getOrderStatus() {
+    public EOrderStatus getOrderStatus() {
         return orderStatus;
     }
     @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
@@ -115,7 +116,7 @@ public class EOrder {
         return logisticsInformation;
     }
     @OneToMany(mappedBy="eOrder" ,cascade=CascadeType.ALL)  
-    public List<EOrderPoduct> getOrderProducts() {
+    public List<EOrderProduct> getOrderProducts() {
         return orderProducts;
     }
     public String getUserId() {
@@ -162,7 +163,7 @@ public class EOrder {
         this.phone = phone;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(EOrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
     
@@ -185,7 +186,7 @@ public class EOrder {
         this.logisticsInformation = logisticsInformation;
     }
 
-    public void setOrderProducts(List<EOrderPoduct> orderProducts) {
+    public void setOrderProducts(List<EOrderProduct> orderProducts) {
         this.orderProducts = orderProducts;
     }
     public void setUserId(String userId) {
