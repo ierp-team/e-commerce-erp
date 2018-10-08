@@ -1,4 +1,4 @@
-package com.ierp.eorder.domain;
+package com.ierp.eordermodule.eorder.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ierp.eorder.util.EOrderStatus;
+import com.ierp.eordermodule.util.EOrderStatus;
 import com.ierp.expressco.domain.Expressco;
 
 /**

@@ -1,4 +1,4 @@
-package com.ierp.eorder.listener;
+package com.ierp.eordermodule.eorder.listener;
 
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.delegate.DelegateTask;
@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ierp.eorder.domain.EOrder;
-import com.ierp.eorder.service.IEOrderService;
-import com.ierp.eorder.util.EOrderStatus;
+import com.ierp.eordermodule.eorder.domain.EOrder;
+import com.ierp.eordermodule.eorder.service.IEOrderService;
+import com.ierp.eordermodule.util.EOrderStatus;
+
 
 @Component
 @Transactional
-public class DeliverGoodListener implements TaskListener{
+public class OutboundListener implements TaskListener{
     private static final long serialVersionUID = 1L;
 
     @Autowired
@@ -29,7 +30,6 @@ public class DeliverGoodListener implements TaskListener{
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         EOrder eOrder = eOrderService.findOneById(new Long(processInstance.getBusinessKey())); 
         
-        eOrder.setOrderStatus(EOrderStatus.DELIVERED);
+        eOrder.setOrderStatus(EOrderStatus.NODELIVER);
     }
-
 }

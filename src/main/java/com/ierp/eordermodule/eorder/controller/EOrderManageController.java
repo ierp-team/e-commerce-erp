@@ -1,4 +1,4 @@
-package com.ierp.eorder.controller;
+package com.ierp.eordermodule.eorder.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +20,8 @@ import com.ierp.activiti.util.WorkflowVariable;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
 import com.ierp.common.web.SessionUtil;
-import com.ierp.eorder.domain.EOrderDTO;
-import com.ierp.eorder.service.IEOrderService;
+import com.ierp.eordermodule.eorder.domain.EOrderDTO;
+import com.ierp.eordermodule.eorder.service.IEOrderService;
 
 
 @RestController

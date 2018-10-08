@@ -1,4 +1,4 @@
-package com.ierp.eorder.domain;
+package com.ierp.eordermodule.eorder.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,8 +12,8 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.ierp.eorder.domain.EOrder;
-import com.ierp.eorder.domain.EOrderQueryDTO;
+import com.ierp.eordermodule.eorder.domain.EOrder;
+import com.ierp.eordermodule.eorder.domain.EOrderQueryDTO;
 
 public class EOrderQueryDTO {
     

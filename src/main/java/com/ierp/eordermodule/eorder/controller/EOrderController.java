@@ -1,4 +1,4 @@
-package com.ierp.eorder.controller;
+package com.ierp.eordermodule.eorder.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ierp.eorder.domain.EOrder;
-import com.ierp.eorder.domain.EOrderQueryDTO;
-import com.ierp.eorder.service.IEOrderService;
+import com.ierp.eordermodule.eorder.domain.EOrder;
+import com.ierp.eordermodule.eorder.domain.EOrderQueryDTO;
+import com.ierp.eordermodule.eorder.service.IEOrderService;
 import com.ierp.common.beans.BeanUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;

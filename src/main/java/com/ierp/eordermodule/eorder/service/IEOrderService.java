@@ -1,4 +1,4 @@
-package com.ierp.eorder.service;
+package com.ierp.eordermodule.eorder.service;
 
 import java.util.Map;
 import java.util.Optional;
@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.ierp.eorder.domain.EOrder;
-import com.ierp.eorder.domain.EOrderDTO;
+import com.ierp.eordermodule.eorder.domain.EOrder;
+import com.ierp.eordermodule.eorder.domain.EOrderDTO;
 
 
 public interface IEOrderService {

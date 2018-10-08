@@ -1,4 +1,4 @@
-package com.ierp.eorder.domain;
+package com.ierp.eordermodule.eorder.domain;
 
 import java.util.Date;
 

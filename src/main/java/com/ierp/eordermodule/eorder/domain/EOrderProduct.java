@@ -1,4 +1,4 @@
-package com.ierp.eorder.domain;
+package com.ierp.eordermodule.eorder.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GeneratorType;
 
-import com.ierp.eorder.util.EOrderProductStatus;
+import com.ierp.eordermodule.util.EOrderProductStatus;
 import com.ierp.goods.domain.Goods;
 
 /**

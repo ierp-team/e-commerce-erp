@@ -1,4 +1,4 @@
-package com.ierp.eorder.listener;
+package com.ierp.eordermodule.eorder.listener;
 
 import java.util.List;
 
@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ierp.eorder.domain.EOrder;
-import com.ierp.eorder.domain.EOrderProduct;
-import com.ierp.eorder.service.IEOrderService;
-import com.ierp.eorder.util.EOrderStatus;
+import com.ierp.eordermodule.eorder.domain.EOrder;
+import com.ierp.eordermodule.eorder.domain.EOrderProduct;
+import com.ierp.eordermodule.eorder.service.IEOrderService;
+import com.ierp.eordermodule.util.EOrderStatus;
 import com.ierp.goods.service.IGoodsService;
 
 @Component

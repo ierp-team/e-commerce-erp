@@ -1,4 +1,4 @@
-package com.ierp.eorder.service;
+package com.ierp.eordermodule.eorder.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ierp.activiti.domain.WorkTaskDTO;
 import com.ierp.activiti.service.IWorkTaskService;
-import com.ierp.eorder.domain.EOrder;
-import com.ierp.eorder.domain.EOrderDTO;
-import com.ierp.eorder.repository.IEOrderRepository;
+import com.ierp.eordermodule.eorder.domain.EOrder;
+import com.ierp.eordermodule.eorder.domain.EOrderDTO;
+import com.ierp.eordermodule.eorder.repository.IEOrderRepository;
 
 
 /**
