@@ -22,6 +22,7 @@ import com.ierp.activiti.service.IWorkTaskService;
 import com.ierp.eordermodule.eorder.domain.EOrder;
 import com.ierp.eordermodule.eorder.domain.EOrderDTO;
 import com.ierp.eordermodule.eorder.repository.IEOrderRepository;
+import com.ierp.eordermodule.eorderproduct.domain.EOrderProduct;
 
 
 /**
@@ -170,6 +171,8 @@ public class EOrderService implements IEOrderService {
    public void complete(String taskId, Map<String, Object> variables) {
        workTaskService.complete(taskId, variables);
    }
+
+    
 
  
 }

@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -104,7 +105,7 @@ public class EOrder {
     public String getExpressNumber() {
         return expressNumber;
     }
-
+    @ManyToOne(cascade=CascadeType.ALL)
     public Expressco getLogisticsCompany() {
         return logisticsCompany;
     }

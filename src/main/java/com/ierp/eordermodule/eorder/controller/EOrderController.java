@@ -99,16 +99,16 @@ public class EOrderController {
         }
     }
     
-    @GetMapping
-    public Page<EOrder> getEOrderList(@RequestParam String orderStatus,ExtjsPageRequest pageable) {
-        Page<EOrder> page;//接收结果集
-        if(orderStatus!=null) {
-            page = eOrderService.getEOrders(orderStatus,pageable.getPageable());
-        }else {
-            page = new PageImpl<EOrder>(new ArrayList<EOrder>(),pageable.getPageable(),0);
-        }
-        return page;
-    }
+//    @GetMapping
+//    public Page<EOrder> getEOrderList(@RequestParam String orderStatus,ExtjsPageRequest pageable) {
+//        Page<EOrder> page;//接收结果集
+//        if(orderStatus!=null) {
+//            page = eOrderService.getEOrders(orderStatus,pageable.getPageable());
+//        }else {
+//            page = new PageImpl<EOrder>(new ArrayList<EOrder>(),pageable.getPageable(),0);
+//        }
+//        return page;
+//    }
 
     
 }

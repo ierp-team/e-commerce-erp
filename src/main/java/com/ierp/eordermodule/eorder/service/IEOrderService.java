@@ -1,5 +1,6 @@
 package com.ierp.eordermodule.eorder.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ public interface IEOrderService {
     public void deleteAll(Long[] ids);
     public Page<EOrder> queryEOrders(Specification<EOrder> spec,Pageable pageable);
     public Page<EOrder> getEOrders(String orderStatus,Pageable pageable );
+    
     
   //流程业务
     //1.启动流程

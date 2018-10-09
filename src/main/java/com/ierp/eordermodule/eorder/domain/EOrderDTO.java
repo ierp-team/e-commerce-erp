@@ -3,6 +3,7 @@ package com.ierp.eordermodule.eorder.domain;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ierp.eordermodule.util.EOrderStatus;
 
 public class EOrderDTO {
     //基本信息
@@ -18,7 +19,7 @@ public class EOrderDTO {
     private String contact;
     private String phone;
     //订单状态
-    private String orderStatus;
+    private EOrderStatus orderStatus;
     //物流信息
     private Date diliverTime;
     
@@ -95,10 +96,10 @@ public class EOrderDTO {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    public String getOrderStatus() {
+    public EOrderStatus getOrderStatus() {
         return orderStatus;
     }
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(EOrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
     public Date getDiliverTime() {

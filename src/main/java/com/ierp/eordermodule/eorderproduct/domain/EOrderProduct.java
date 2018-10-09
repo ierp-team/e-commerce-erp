@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -26,9 +27,7 @@ public class EOrderProduct {
     private Float totalPrice;
     
     private EOrderProductStatus orderProductStatus;
-    
- 
-    
+
     private EOrder eOrder;
     private Goods good;
     //getters
@@ -49,6 +48,7 @@ public class EOrderProduct {
         return eOrder;
     }
     @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "goodsCode",referencedColumnName="goodsCode", insertable = false, updatable = false, unique = true)
     public Goods getGood() {
         return good;
     }

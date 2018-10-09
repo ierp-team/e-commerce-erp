@@ -1,5 +1,7 @@
 package com.ierp.eordermodule.eorder.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -8,6 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import com.ierp.eordermodule.eorder.domain.EOrder;
+import com.ierp.eordermodule.eorderproduct.domain.EOrderProduct;
 
 
 /**
@@ -19,4 +22,6 @@ public interface IEOrderRepository extends PagingAndSortingRepository<EOrder, Lo
 
     @Query("from EOrder eOrder where eOrder.orderStatus = ?1") 
     public Page<EOrder> findEOrder(String orderStatus,Pageable pageable); 
+    
+    
 }
