@@ -19,6 +19,7 @@ public class GoodsQueryDTO {
 	private String goodsCode;
 	private String goodsName;
 	private String goodsUuid;
+	private Long vendorId;
 	
 	public String getGoodsCode() {
 		return goodsCode;
@@ -29,6 +30,9 @@ public class GoodsQueryDTO {
 	public String getGoodsUuid() {
 		return goodsUuid;
 	}
+	public Long getVendorId() {
+		return vendorId;
+	}
 	
 	public void setGoodsCode(String goodsCode) {
 		this.goodsCode = goodsCode;
@@ -38,6 +42,9 @@ public class GoodsQueryDTO {
 	}
 	public void setGoodsUuid(String goodsUuid) {
 		this.goodsUuid = goodsUuid;
+	}
+	public void setVendorId(Long vendorId) {
+		this.vendorId = vendorId;
 	}
 	
 	@SuppressWarnings({ "serial"})
@@ -52,11 +59,11 @@ public class GoodsQueryDTO {
 					predicate.add(criteriaBuilder.like(root.get("goodsCode").as(String.class),
 							"%" + goodsQueryDTO.getGoodsCode() + "%"));
 				}
-				if (StringUtils.isNotBlank(goodsQueryDTO.getGoodsCode())) {
+				if (StringUtils.isNotBlank(goodsQueryDTO.getGoodsName())) {
 					predicate.add(criteriaBuilder.like(root.get("goodsName").as(String.class),
 							"%" + goodsQueryDTO.getGoodsName() + "%"));
 				}
-				if (StringUtils.isNotBlank(goodsQueryDTO.getGoodsCode())) {
+				if (StringUtils.isNotBlank(goodsQueryDTO.getGoodsUuid())) {
 					predicate.add(criteriaBuilder.like(root.get("goodsUuid").as(String.class),
 							"%" + goodsQueryDTO.getGoodsUuid() + "%"));
 				}
