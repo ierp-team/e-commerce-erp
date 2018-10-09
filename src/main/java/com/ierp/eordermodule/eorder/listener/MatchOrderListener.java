@@ -49,7 +49,7 @@ public class MatchOrderListener implements TaskListener {
         List <EOrderProduct> eOrderPoductList= eOrder.getOrderProducts();
         for(EOrderProduct eOrderPoduct : eOrderPoductList){
             //Goods good = goodsService.findById(eOrderPoduct.getGood().getGoodsId()).get();
-            if(!(goodsService.existsById(eOrderPoduct.getGood().getGoodsId()))){
+            if(!(goodsService.existsById(eOrderPoduct.getGood().getId()))){
                 eOrderPoduct.setOrderProductStatus(EOrderProductStatus.NOEXIST);
                 count++;
             }else{
