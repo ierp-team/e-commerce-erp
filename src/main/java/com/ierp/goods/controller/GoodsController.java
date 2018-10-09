@@ -37,10 +37,10 @@ public class GoodsController {
 		}
 	}
 	
-	@PutMapping(value="{goodsId}",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse update(@PathVariable("goodsId") Long goodsId,@RequestBody Goods dto) {
+	@PutMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE)
+	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody Goods dto) {
 		try {
-			Goods entity = goodsService.findById(goodsId).get();
+			Goods entity = goodsService.findById(id).get();
 			if(entity!=null) {
 				BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
 				goodsService.save(entity);
@@ -53,11 +53,11 @@ public class GoodsController {
 		}
 	}
 	
-	@DeleteMapping(value="{goodsId}")
-	public ExtAjaxResponse delete(@PathVariable("goodsId") Long goodsId) {
+	@DeleteMapping(value="{id}")
+	public ExtAjaxResponse delete(@PathVariable("id") Long id) {
 		try {
-			if(goodsId!=null) {
-				goodsService.deleteById(goodsId);
+			if(id!=null) {
+				goodsService.deleteById(id);
 				return new ExtAjaxResponse(true,"删除成功！");
 			} else {
 				return new ExtAjaxResponse(true,"删除失败！");
@@ -68,10 +68,10 @@ public class GoodsController {
 	}
 	
 	@PostMapping("/deletes")
-	public ExtAjaxResponse deleteRows(@RequestParam(name="goodsIds") Long[] goodsIds) {
+	public ExtAjaxResponse deleteRows(@RequestParam(name="ids") Long[] ids) {
 		try {
-			if(goodsIds!=null) {
-				goodsService.deleteAll(goodsIds);
+			if(ids!=null) {
+				goodsService.deleteAll(ids);
 				return new ExtAjaxResponse(true,"批量删除成功！");
 			} else {
 				return new ExtAjaxResponse(true,"批量删除失败！");
@@ -81,9 +81,9 @@ public class GoodsController {
 		}
 	}
 	
-	@GetMapping(value="{goodsId}")
-	public Goods getOne(@PathVariable("goodsId") Long goodsId) {
-		return goodsService.findById(goodsId).get();
+	@GetMapping(value="{id}")
+	public Goods getOne(@PathVariable("id") Long id) {
+		return goodsService.findById(id).get();
 	}
 	
 	@GetMapping

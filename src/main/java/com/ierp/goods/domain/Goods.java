@@ -1,5 +1,6 @@
 package com.ierp.goods.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Table(name="t_goods")
 public class Goods {
 	
-	private Long goodsId;			//商品id
+	private Long id;			//商品id
 	private String goodsCode;		//商品编号
 	private String goodsName;		//商品名字
 	private String goodsPhoto;		//商品图片（路径）
@@ -28,9 +29,10 @@ public class Goods {
 	private Integer goodsStock;		//库存
 	
 	@Id
+	@Column(name="goods_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public Long getGoodsId() {
-		return goodsId;
+	public Long getId() {
+		return id;
 	}
 	@NotNull
 	public String getGoodsCode() {
@@ -69,8 +71,8 @@ public class Goods {
 		return goodsStock;
 	}
 	
-	public void setGoodsId(Long goodsId) {
-		this.goodsId = goodsId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public void setGoodsCode(String goodsCode) {
 		this.goodsCode = goodsCode;
@@ -101,6 +103,11 @@ public class Goods {
 	}
 	public void setGoodsStock(Integer goodsStock) {
 		this.goodsStock = goodsStock;
+	}
+	
+	@Override
+	public String toString() {
+		return "Goods [id=" + id + ", goodsUuid=" + goodsUuid + ", goodsStock=" + goodsStock + "]";
 	}
 	
 }
