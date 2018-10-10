@@ -37,10 +37,10 @@ public class ExpresscoController {
 		}
 	}
 	
-	@PutMapping(value="{expresscoId}",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse update(@PathVariable("expresscoId") Long expresscoId,@RequestBody Expressco dto) {
+	@PutMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE)
+	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody Expressco dto) {
 		try {
-			Expressco entity = expresscoService.findById(expresscoId).get();
+			Expressco entity = expresscoService.findById(id).get();
 			if(entity!=null) {
 				BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
 				expresscoService.save(entity);
@@ -53,11 +53,11 @@ public class ExpresscoController {
 		}
 	}
 	
-	@DeleteMapping(value="{expresscoId}")
-	public ExtAjaxResponse delete(@PathVariable("expresscoId") Long expresscoId) {
+	@DeleteMapping(value="{id}")
+	public ExtAjaxResponse delete(@PathVariable("id") Long id) {
 		try {
-			if(expresscoId!=null) {
-				expresscoService.deleteById(expresscoId);
+			if(id!=null) {
+				expresscoService.deleteById(id);
 				return new ExtAjaxResponse(true,"删除成功！");
 			} else {
 				return new ExtAjaxResponse(true,"删除失败！");
@@ -68,10 +68,10 @@ public class ExpresscoController {
 	}
 	
 	@PostMapping("/deletes")
-	public ExtAjaxResponse deleteRows(@RequestParam(name="expresscoIds") Long[] expresscoIds) {
+	public ExtAjaxResponse deleteRows(@RequestParam(name="ids") Long[] ids) {
 		try {
-			if(expresscoIds!=null) {
-				expresscoService.deleteAll(expresscoIds);
+			if(ids!=null) {
+				expresscoService.deleteAll(ids);
 				return new ExtAjaxResponse(true,"批量删除成功！");
 			} else {
 				return new ExtAjaxResponse(true,"批量删除失败！");
@@ -81,9 +81,9 @@ public class ExpresscoController {
 		}
 	}
 	
-	@GetMapping(value="{expresscoId}")
-	public Expressco getOne(@PathVariable("expresscoId") Long expresscoId) {
-		return expresscoService.findById(expresscoId).get();
+	@GetMapping(value="{id}")
+	public Expressco getOne(@PathVariable("id") Long id) {
+		return expresscoService.findById(id).get();
 	}
 	
 	@GetMapping

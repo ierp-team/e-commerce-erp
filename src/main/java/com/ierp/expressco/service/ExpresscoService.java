@@ -1,5 +1,8 @@
 package com.ierp.expressco.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +26,24 @@ public class ExpresscoService implements IExpresscoService {
 	}
 
 	@Override
-	public void deleteById(Long expresscoId) {
-		expresscoRepository.deleteById(expresscoId);
+	public void deleteById(Long id) {
+		expresscoRepository.deleteById(id);
 
 	}
 
 	@Override
-	public void deleteAll(Long[] expresscoIds) {
-		expresscoRepository.deleteAll();
+	public void deleteAll(Long[] ids) {
+		List<Long> idLists = new ArrayList<Long>(Arrays.asList(ids));
+		
+		List<Expressco> expresscoList = (List<Expressco>) expresscoRepository.findAllById(idLists);
+		if(expresscoList!=null) {
+			expresscoRepository.deleteAll(expresscoList);
+		}
 	}
 	
 	@Override
-	public Optional<Expressco> findById(Long expresscoId) {
-		return expresscoRepository.findById(expresscoId);
+	public Optional<Expressco> findById(Long id) {
+		return expresscoRepository.findById(id);
 	}
 
 	@Override
@@ -44,8 +52,8 @@ public class ExpresscoService implements IExpresscoService {
 	}
 
 	@Override
-	public boolean existsById(Long expresscoId) {
-		return expresscoRepository.existsById(expresscoId);
+	public boolean existsById(Long id) {
+		return expresscoRepository.existsById(id);
 	}
 
 	public long count() {

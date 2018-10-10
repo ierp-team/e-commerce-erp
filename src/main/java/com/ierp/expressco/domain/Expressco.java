@@ -1,5 +1,6 @@
 package com.ierp.expressco.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,14 +16,15 @@ import javax.validation.constraints.NotNull;
 @Table(name="t_expressco")
 public class Expressco {
 	
-	private Long expresscoId;			//物流公司id
+	private Long id;			//物流公司id
 	private String expresscoCode;		//物流公司编号
 	private String expresscoName;		//物流公司名
 	
 	@Id
+	@Column(name="expressco_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public Long getExpresscoId() {
-		return expresscoId;
+	public Long getId() {
+		return id;
 	}
 	@NotNull
 	public String getExpresscoCode() {
@@ -33,14 +35,19 @@ public class Expressco {
 		return expresscoName;
 	}
 	
-	public void setExpresscoId(Long expresscoId) {
-		this.expresscoId = expresscoId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public void setExpresscoCode(String expresscoCode) {
 		this.expresscoCode = expresscoCode;
 	}
 	public void setExpresscoName(String expresscoName) {
 		this.expresscoName = expresscoName;
+	}
+	
+	@Override
+	public String toString() {
+		return "Expressco [id=" + id + ", expresscoCode=" + expresscoCode + ", expresscoName=" + expresscoName + "]";
 	}
 	
 }

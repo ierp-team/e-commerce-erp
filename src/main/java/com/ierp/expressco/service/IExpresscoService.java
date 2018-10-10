@@ -12,12 +12,12 @@ public interface IExpresscoService {
 	
 	public Expressco save(Expressco entity);
 	
-	public void deleteById(Long expresscoId);
-	public void deleteAll(Long[] expresscoIds);
+	public void deleteById(Long id);
+	public void deleteAll(Long[] ids);
 	
-	public Optional<Expressco> findById(Long expresscoId);
+	public Optional<Expressco> findById(Long id);
 	public Page<Expressco> findAll(Specification<Expressco> spec, Pageable pageable);
-	public boolean existsById(Long expresscoId);
+	public boolean existsById(Long id);
 	public long count();
 	
 }

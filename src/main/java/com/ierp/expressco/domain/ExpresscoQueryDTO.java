@@ -20,9 +20,6 @@ public class ExpresscoQueryDTO {
 	private String expresscoName;
 	
 
-	public String getexpresscoCode() {
-		return expresscoCode;
-	}
 	public String getExpresscoCode() {
 		return expresscoCode;
 	}
@@ -31,9 +28,6 @@ public class ExpresscoQueryDTO {
 	}
 
 	public void setexpresscoCode(String expresscoCode) {
-		this.expresscoCode = expresscoCode;
-	}
-	public void setExpresscoCode(String expresscoCode) {
 		this.expresscoCode = expresscoCode;
 	}
 	public void setExpresscoName(String expresscoName) {
@@ -48,11 +42,11 @@ public class ExpresscoQueryDTO {
 			
 				List<Predicate> predicate = new ArrayList<>();
 				
-				if (StringUtils.isNotBlank(expresscoQueryDTO.getexpresscoCode())) {
+				if (StringUtils.isNotBlank(expresscoQueryDTO.getExpresscoCode())) {
 					predicate.add(criteriaBuilder.like(root.get("expresscoCode").as(String.class),
 							"%" + expresscoQueryDTO.getExpresscoCode() + "%"));
 				}
-				if (StringUtils.isNotBlank(expresscoQueryDTO.getexpresscoCode())) {
+				if (StringUtils.isNotBlank(expresscoQueryDTO.getExpresscoName())) {
 					predicate.add(criteriaBuilder.like(root.get("expresscoName").as(String.class),
 							"%" + expresscoQueryDTO.getExpresscoName() + "%"));
 				}
