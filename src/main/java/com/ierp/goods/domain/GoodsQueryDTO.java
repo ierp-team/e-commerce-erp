@@ -67,6 +67,10 @@ public class GoodsQueryDTO {
 					predicate.add(criteriaBuilder.like(root.get("goodsUuid").as(String.class),
 							"%" + goodsQueryDTO.getGoodsUuid() + "%"));
 				}
+				if (null!=goodsQueryDTO.getVendorId()) {
+					predicate.add(criteriaBuilder.equal(root.get("vendorId").as(Long.class),
+							goodsQueryDTO.getVendorId()));
+				}
 				
 				Predicate[] pre = new Predicate[predicate.size()];
 				return query.where(predicate.toArray(pre)).getRestriction();

@@ -107,7 +107,10 @@ public class Goods {
 	
 	@Override
 	public String toString() {
-		return "Goods [id=" + id + ", goodsUuid=" + goodsUuid + ", goodsStock=" + goodsStock + "]";
+		return "Goods [id=" + id + ", goodsCode=" + goodsCode + ", goodsName=" + goodsName
+				+ ", goodsPhoto=" + goodsPhoto + ", goodsUuid=" + goodsUuid + ", goodsDesc=" + goodsDesc
+				+ ", goodsSpec=" + goodsSpec + ", vendorId=" + vendorId + ", supplyPrice=" + supplyPrice
+				+ ", salePrice=" + salePrice + ", goodsStock=" + goodsStock + "]";
 	}
 	
 }

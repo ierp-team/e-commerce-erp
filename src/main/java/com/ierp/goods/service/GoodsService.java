@@ -1,5 +1,7 @@
 package com.ierp.goods.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +34,12 @@ public class GoodsService implements IGoodsService {
 
 	@Override
 	public void deleteAll(Long[] ids) {
-		goodsRepository.deleteAll();
+		List<Long> idLists = new ArrayList<Long>(Arrays.asList(ids));
+		
+		List<Goods> goodsList = (List<Goods>) goodsRepository.findAllById(idLists);
+		if(goodsList!=null) {
+			goodsRepository.deleteAll(goodsList);
+		}
 	}
 	
 	@Override
