@@ -61,6 +61,7 @@ public class User {
     public String getSex() {
         return sex;
     }
+//    @DateTimeFormat(pattern="yyyy/MM/dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy/MM/dd")
     public Date getBirthday() {
         return birthday;

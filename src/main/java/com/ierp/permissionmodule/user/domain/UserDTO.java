@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ierp.permissionmodule.group.domain.Group;
 
 public class UserDTO {
@@ -19,12 +19,14 @@ public class UserDTO {
     
     private String phone;//手机号码
     private String sex;//性别
+//    @DateTimeFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy/MM/dd")
     private Date birthday;//出生日期
     private String address;//家庭地址
     private String status;//账号状态
     
 //    private String groupId;
-    private String groupName;
+    private String role;
 //    private String type;
     
     
@@ -70,7 +72,6 @@ public class UserDTO {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	@DateTimeFormat(pattern="yyyy/MM/dd")
 	public Date getBirthday() {
 		return birthday;
 	}
@@ -95,11 +96,11 @@ public class UserDTO {
 //	public void setGroupId(String groupId) {
 //		this.groupId = groupId;
 //	}
-	public String getGroupName() {
-		return groupName;
+	public String getRole() {
+		return role;
 	}
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+	public void setRole(String role) {
+		this.role = role;
 	}
 //	public String getType() {
 //		return type;
@@ -116,18 +117,19 @@ public class UserDTO {
 //    		group.setName(dto.getGroupName());
 //    		group.setType(dto.getType());
 //    	}
-    	if(dto.getGroupName() != null) {
+    	if(dto.getRole() != null) {
     		Group group = new Group();
-    		group.setName(dto.getGroupName());
+    		group.setName(dto.getRole());
     	}
     }
     
-    public static void entityToDTO(User entity,UserDTO dto) {
+    
+	public static void entityToDTO(User entity,UserDTO dto) {
     	BeanUtils.copyProperties(entity, dto);
     	List<Group> groupList = entity.getGroup();
     	for(int i=0;i<groupList.size();i++) {
 //    		dto.setGroupId(groupList.get(i).getGroupName());
-    		dto.setGroupName(groupList.get(i).getName());
+    		dto.setRole(groupList.get(i).getName());
 //    		dto.setType(groupList.get(i).getType());
     	}
     }
@@ -136,9 +138,18 @@ public class UserDTO {
     
 	@Override
 	public String toString() {
-		return "UserDTO [id=" + id + ", password=" + password + ", profile_pic=" + profile_pic + ", userName="
-				+ userName + ", user_num=" + user_num + ", phone=" + phone + ", sex=" + sex + ", birthday=" + birthday
-				+ ", address=" + address + ", status=" + status + ", groupName=" + groupName + "]";
+		return "UserDTO [id=" + id 
+					+ ", password=" + password 
+					+ ", profile_pic=" + profile_pic 
+					+ ", userName=" + userName 
+					+ ", user_num=" + user_num 
+					+ ", phone=" + phone 
+					+ ", sex=" + sex 
+					+ ", birthday=" + birthday
+					+ ", address=" + address 
+					+ ", status=" + status 
+					+ ", groupName=" + role 
+				+ "]";
 	}
     
     
