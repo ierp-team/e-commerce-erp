@@ -1,6 +1,7 @@
 package com.ierp.eordermodule.eorder.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ierp.eordermodule.eorder.domain.EOrder;
 import com.ierp.eordermodule.eorder.domain.EOrderQueryDTO;
 import com.ierp.eordermodule.eorder.service.IEOrderService;
+import com.ierp.eordermodule.eorderproduct.domain.EOrderProduct;
+import com.ierp.eordermodule.eorderproduct.repository.IEOrderProductRepository;
+import com.ierp.goods.domain.Goods;
+import com.ierp.goods.service.IGoodsService;
+import com.ierp.permissionmodule.group.domain.Group;
+import com.ierp.permissionmodule.navigation.domain.NavigationNode;
 import com.ierp.common.beans.BeanUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
@@ -34,6 +41,10 @@ public class EOrderController {
 
     @Autowired 
     private IEOrderService eOrderService;
+    @Autowired 
+    private IGoodsService goodsService;
+    @Autowired 
+    private IEOrderProductRepository eOrderProductRepository;
     
     @GetMapping
     public Page<EOrder>  getPage(EOrderQueryDTO eOrderQueryDTO , ExtjsPageRequest pageRequest) 
@@ -66,6 +77,21 @@ public class EOrderController {
                 eOrderService.save(entity);
             }
             return new ExtAjaxResponse(true,"更新成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ExtAjaxResponse(false,"操作失败!");
+        }
+    }
+    @RequestMapping(value="/isexist/{id}")
+    public ExtAjaxResponse isExist(@PathVariable("id") Long id) {
+        try {
+
+                if(!(eOrderService.existsById(id))||id==null){
+                    return new ExtAjaxResponse(false,"订单不存在!");
+                }
+                return new ExtAjaxResponse(true,"订单存在!");
+
+            
         } catch (Exception e) {
             e.printStackTrace();
             return new ExtAjaxResponse(false,"操作失败!");
@@ -109,6 +135,65 @@ public class EOrderController {
 //        }
 //        return page;
 //    }
+    @RequestMapping("/init")
+    public @ResponseBody ExtAjaxResponse initData() 
+    { 
+        try {
+            Goods g1 = new Goods();
+            g1.setGoodsCode("qb007");
+            g1.setGoodsName("铅笔7号");
+            g1.setGoodsDesc("7棒棒哒");
+            g1.setGoodsStock(70);
+            g1.setGoodsUuid("ppppp0007");
+            g1.setSupplyPrice((float)27.6);
+            g1.setSalePrice((float)25.7);
+            
+            Goods g2 = new Goods();
+            g2.setGoodsCode("qb008");
+            g2.setGoodsName("铅笔8号");
+            g2.setGoodsDesc("8也是棒棒哒");
+            g2.setGoodsStock(80);
+            g2.setGoodsUuid("ppppp0008");
+            g2.setSupplyPrice((float)18.6);
+            g2.setSalePrice((float)28.8);
+            
+            EOrder eo1 = new EOrder();
+            eo1.setAddress("东莞市松山湖大学路1号");
+            eo1.setContact("高同学");
+            eo1.setCreateTime(new Date());
+            eo1.setLogisticsCompany(null);
+            eo1.setOrderNumber("tb000003");
+            
+    
+            EOrderProduct eop1 = new EOrderProduct();
+            eop1.setGood(g1);
+            eop1.setQuantity(2);
+            eop1.setTotalPrice((float)700);
+            eop1.seteOrder(eo1);
+            EOrderProduct eop2 = new EOrderProduct();
+            eop2.setGood(g2);
+            eop2.setQuantity(3);
+            eop2.setTotalPrice((float)800);
+            eop2.seteOrder(eo1);
+            
+            goodsService.save(g1);
+            goodsService.save(g2);
+            eop1.setGood(g1);
+            eop2.setGood(g2);
+            eOrderProductRepository.save(eop1);
+            eOrderProductRepository.save(eop2);
+            eo1.getOrderProducts().add(eop1);
+            eo1.getOrderProducts().add(eop2);
+            eOrderService.save(eo1);
+            
+            
+         
+            return new ExtAjaxResponse(true,"操作成功！");
+        } catch (Exception e) {
+             e.printStackTrace();
+             return new ExtAjaxResponse(false,"操作失败！");
+        }
+    } 
 
     
 }

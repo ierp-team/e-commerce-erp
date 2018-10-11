@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 public class ExtjsPageRequest {
-    private int page = 0;
+    private int page = 1;
     private int limit =20;
     private String sort = "id";
     private String dir = "DESC";

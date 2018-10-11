@@ -17,8 +17,12 @@ public class EOrderProductDTO {
     
     
     public static void entityToDto(EOrderProduct entity,EOrderProductDTO dto ) {
-        BeanUtils.copyProperties(entity, dto);
-        dto.setGoodName(entity.getGood().getGoodsName());
+        if(entity!=null){
+            BeanUtils.copyProperties(entity, dto);
+            if(entity.getGood()!=null){
+                dto.setGoodName(entity.getGood().getGoodsName());
+            }
+        }
     }
 //    //前到后：2.维护多个对象 的数据 以及 对象之间的关联关系 (创建关联、更新关联)
 //    public static void dtoToEntity(EOrderProductDTO dto ,EOrderProduct entity) {

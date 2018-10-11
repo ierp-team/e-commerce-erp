@@ -43,24 +43,19 @@ public class GoodEnoughListener implements TaskListener{
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         EOrder eOrder = eOrderService.findOneById(new Long(processInstance.getBusinessKey()));   
         
-//        List <EOrderProduct> eOrderPoductList= eOrder.getOrderProducts();    // 拿到订单里面的所有订单产品
-//        for(EOrderProduct eOrderPoduct : eOrderPoductList){                            // 对每个订单产品进行库存修改操作
+        List <EOrderProduct> eOrderPoductList= eOrder.getOrderProducts();    // 拿到订单里面的所有订单产品
+        for(EOrderProduct eOrderPoduct : eOrderPoductList){                            // 对每个订单产品进行库存修改操作
         
-//            int totalNumber = goodsService.getNumberByGoodCode(eOrderPoduct.getGood().getGoodsCode());
-//            int quantity = eOrderPoduct.getQuantity();
-//            //int finalNumber;
-        
-//            Goods good = goodsService.findById(eOrderPoduct.getGood().getGoodsId()).get();
-        
-//            if(totalNumber>=quantity){
-//                //finalNumber = totalNumber-quantity;
-//                //goodsService.setNumber(eOrderPoduct.getGood().getGoodsCode(),finalNumber);
-//                eOrderPoduct.setOrderProductStatus(EOrderProductStatus.ENOUGH);
-//            }else{
-//                eOrderPoduct.setOrderProductStatus(EOrderProductStatus.NOENOUGH );
-//                count++;
-//            }
-//        }
+            int totalNumber = goodsService.sumGoodsStock(eOrderPoduct.getGood().getGoodsUuid());
+            int orderQuantity = eOrderPoduct.getQuantity();
+
+            if(totalNumber>=orderQuantity){
+                eOrderPoduct.setOrderProductStatus(EOrderProductStatus.ENOUGH);
+            }else{
+                eOrderPoduct.setOrderProductStatus(EOrderProductStatus.NOENOUGH );
+                count++;
+            }
+        }
         if(count == 0){
             eOrder.setOrderStatus(EOrderStatus.MATCHED );
             taskService.setVariable(delegateTask.getId(), "isEnough", true);
