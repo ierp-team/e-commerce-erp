@@ -11,8 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+
 import com.ierp.permissionmodule.navigation.domain.NavigationNode;
-import com.ierp.permissionmodule.user.domain.User;
 @Entity
 @Table(name="act_id_group")
 public class Group {
@@ -70,4 +70,27 @@ public class Group {
 //    public void setUserList(List<User> userList) {
 //        this.userList = userList;
 //    }
+    
+    public Group(String groupName, String rev, String name, String type, List<NavigationNode> childNodes) {
+    	super();
+    	this.groupName = groupName;
+    	this.rev = rev;
+    	this.name = name;
+    	this.type = type;
+    	this.childNodes = childNodes;
+    }
+    public Group() {
+    	super();
+    }
+    
+	@Override
+	public String toString() {
+		return "Group [groupName=" + groupName 
+					+ ", rev=" + rev 
+					+ ", name=" + name 
+					+ ", type=" + type 
+//					+ ", childNodes="+ childNodes 
+				+ "]";
+	}
+   
 }

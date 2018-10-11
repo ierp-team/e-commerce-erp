@@ -7,14 +7,18 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.ierp.permissionmodule.group.domain.Group;
-import com.ierp.permissionmodule.navigation.domain.NavigationNode;
+//import com.ierp.permissionmodule.navigation.domain.NavigationNode;
 @Entity
 @Table(name="act_id_user")
 public class User {
@@ -23,7 +27,7 @@ public class User {
    
     private String profile_pic;//头像
     private String userName;//姓名
-    private Long user_num;//员工编号
+    private String user_num;//员工编号
     
     private String phone;//手机号码
     private String sex;//性别
@@ -32,7 +36,7 @@ public class User {
     private String status;//账号状态
      
     
-    private List<Group> groupList;// = new ArrayList<Group>();//角色
+    private List<Group> groupList = new ArrayList<Group>();//角色
     
     
     @Id
@@ -47,7 +51,7 @@ public class User {
     public String getUserName() {
         return userName;
     }
-    public Long getUser_num() {
+    public String getUser_num() {
         return user_num;
     }
    
@@ -57,6 +61,7 @@ public class User {
     public String getSex() {
         return sex;
     }
+    @DateTimeFormat(pattern="yyyy/MM/dd")
     public Date getBirthday() {
         return birthday;
     }
@@ -75,11 +80,9 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    public void setUser_num(Long user_num) {
+    public void setUser_num(String user_num) {
         this.user_num = user_num;
     }
-   
-   
     public void setPhone(String phone) {
         this.phone = phone;
     }

@@ -1,11 +1,12 @@
-Ext.define('Admin.view.user.User', {
+﻿Ext.define('Admin.view.user.User', {
     extend: 'Ext.container.Container',
     xtype: 'user',
-    
-    controller: 'userViewController',
-    viewModel: {type: 'userViewModel'},
     	
     layout: 'fit',
-    
+
+    controller: 'userViewController',
+    viewModel: {type: 'userViewModel'},
+
     items: [{xtype:'userPanel'}]
+    
 });
