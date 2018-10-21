@@ -7,20 +7,20 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.ierp.permissionmodule.group.domain.Group;
 //import com.ierp.permissionmodule.navigation.domain.NavigationNode;
 @Entity
 @Table(name="act_id_user")
+@SQLDelete(sql = "update act_id_user set status = '离职' where ID_ = ?")
 public class User {
     private String id;//ID
     private String password;
@@ -41,6 +41,8 @@ public class User {
     
     @Id
     @Column(name="ID_")
+//    @GeneratedValue(generator="userIdGenerator")
+//    @GenericGenerator(name="userIdGenerator",strategy="assigned")
     public String getId() {
         return id;
     }
@@ -117,5 +119,21 @@ public class User {
         this.groupList = groupList;
     }
 
+	@Override
+	public String toString() {
+		return "User [id=" + id 
+					+ ", password=" + password 
+					+ ", profile_pic=" + profile_pic 
+					+ ", userName=" + userName
+					+ ", user_num=" + user_num 
+					+ ", phone=" + phone 
+					+ ", sex=" + sex 
+					+ ", birthday=" + birthday
+					+ ", address=" + address 
+					+ ", status=" + status 
+				+ "]";
+	}
+
+    
     
 }
