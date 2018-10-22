@@ -1,4 +1,4 @@
-package com.ierp.vendor.service;
+package com.ierp.stockorder.service;
 
 import java.util.Optional;
 
@@ -6,16 +6,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.ierp.vendor.domain.Vendor;
+import com.ierp.stockorder.domain.StockOrder;
 
-
-public interface IVendorService {
-	public Vendor save(Vendor entity);
-	public Optional<Vendor> findById(Long id);
+public interface IStockOrderService {
+	public StockOrder save(StockOrder entity);
+	public Optional<StockOrder> findById(Long id);
 	public boolean existsById(Long id);
 	public long count();
 	public void deleteById(Long id);
 	public void deleteAll(Long[] ids);
-	public Vendor findByVendorName(String vendorName);
-	public Page<Vendor> findAll(Specification<Vendor> spec, Pageable pageable);
+	public Page<StockOrder> findAll(Specification<StockOrder> spec, Pageable pageable);
 }

@@ -1,22 +1,11 @@
 package com.ierp.product.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.ierp.common.beans.BeanUtils;
 
-import com.ierp.vendor.domain.Vendor;
-
-@Entity
-@Table(name="t_vendor_product")
-public class Product {
+public class ProductDisplayDTO {
 	private Long productId;
-	private Vendor vendor;
+	private Long vendorId;
+	private String vendorName;
 	private String productName;
 	private Float productPrice;
 	private String productDesc;
@@ -26,17 +15,16 @@ public class Product {
 //	private String productStatus;//状态  1.存货  2.缺货  3.下架
 	private Integer productStock; //库存
 	
-	@Id
-	@Column(name="product_id")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public Long getProductId() {
 		return productId;
 	}
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="vendorId")
-	public Vendor getVendor() {
-		return vendor;
+
+	public Long getVendorId() {
+		return vendorId;
+	}
+
+	public String getVendorName() {
+		return vendorName;
 	}
 
 	public String getProductName() {
@@ -71,46 +59,61 @@ public class Product {
 		return productStock;
 	}
 	
-	
-	
 	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
-
-	public void setVendor(Vendor vendor) {
-		this.vendor = vendor;
-	}
 	
+	public void setVendorId(Long vendorId) {
+		this.vendorId = vendorId;
+	}
+
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
+	}
+
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	
+
 	public void setProductPrice(Float productPrice) {
 		this.productPrice = productPrice;
 	}
-	
+
 	public void setProductDesc(String productDesc) {
 		this.productDesc = productDesc;
 	}
-	
+
 	public void setProductPic(String productPic) {
 		this.productPic = productPic;
 	}
-	
+
 	public void setProductSpec(String productSpec) {
 		this.productSpec = productSpec;
 	}
-	
+
 	public void setProductUuid(String productUuid) {
 		this.productUuid = productUuid;
 	}
-	
+
 //	public void setProductStatus(String productStatus) {
 //		this.productStatus = productStatus;
 //	}
-	
+
 	public void setProductStock(Integer productStock) {
 		this.productStock = productStock;
 	}
-
+	
+	//后到前：1.针对“前端”设计的数据封装对象(查询)
+	public static void entityToDto(Product entity,ProductDisplayDTO dto ) {
+		BeanUtils.copyProperties(entity, dto);
+		if(entity.getVendor()!=null) {
+			dto.setVendorId(entity.getVendor().getVendorId());
+			dto.setVendorName(entity.getVendor().getVendorName());
+		}
+	}
+	
+	//前到后：2.维护多个对象 的数据 以及 对象之间的关联关系 (创建关联、更新关联)
+		public static void dtoToEntity(ProductDisplayDTO dto ,Product entity) {
+			BeanUtils.copyProperties(dto, entity);
+		}	
 }

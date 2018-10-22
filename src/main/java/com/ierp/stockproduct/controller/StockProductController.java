@@ -1,4 +1,4 @@
-package com.ierp.vendor.controller;
+package com.ierp.stockproduct.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,37 +13,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ierp.common.beans.BeanUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
-import com.ierp.vendor.domain.Vendor;
-import com.ierp.vendor.domain.VendorQueryDTO;
-import com.ierp.vendor.service.IVendorService;
+import com.ierp.stockorder.service.IStockOrderService;
+import com.ierp.stockproduct.domain.StockProduct;
+import com.ierp.stockproduct.domain.StockProductOrderDTO;
+import com.ierp.stockproduct.domain.StockProductQueryDTO;
+import com.ierp.stockproduct.service.IStockProductService;
 
 @RestController
-@RequestMapping("/vendor")
-public class VendorController {
+@RequestMapping("/stockproduct")
+public class StockProductController {
 
 	@Autowired
-	private IVendorService vendorService;
+	private IStockProductService stockProductService;
 	
 	@GetMapping
-	public Page<Vendor> getPage(VendorQueryDTO vendorQueryDTO , ExtjsPageRequest pageRequest){
-		return vendorService.findAll(VendorQueryDTO.getWhereClause(vendorQueryDTO), pageRequest.getPageable());
+	public Page<StockProductOrderDTO> getPage(Long stockOrderId, ExtjsPageRequest pageRequest){
+		
+		return stockProductService.findAll(pageRequest.getPageable());
 	}
 	
-	@GetMapping(value="{vendorId}")
-	public Vendor getOne(@PathVariable("vendorId") Long id) 
+	@GetMapping(value="{stockProductId}")
+	public StockProduct getOne(@PathVariable("stockProductId") Long id) 
 	{
-		return vendorService.findById(id).get();
+		return stockProductService.findById(id).get();
 	}
 	
-	@DeleteMapping(value="{vendorId}")
-	public ExtAjaxResponse delete(@PathVariable("vendorId") Long id) 
+	@DeleteMapping(value="{stockProductId}")
+	public ExtAjaxResponse delete(@PathVariable("stockProductId") Long id) 
 	{
 		try {
 			if(id!=null) {
-				vendorService.deleteById(id);
+				stockProductService.deleteById(id);
 			}
 			return new ExtAjaxResponse(true,"删除成功！");
 		} catch (Exception e) {
@@ -56,7 +58,7 @@ public class VendorController {
 	{
 		try {
 			if(ids!=null) {
-				vendorService.deleteAll(ids);
+				stockProductService.deleteAll(ids);
 			}
 			return new ExtAjaxResponse(true,"批量删除成功！");
 		} catch (Exception e) {
@@ -64,15 +66,11 @@ public class VendorController {
 		}
 	}
 	
-	@PutMapping(value="{vendorId}",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse update(@PathVariable("vendorId") Long myId,@RequestBody Vendor dto) 
+	@PutMapping(value="{stockProductId}",consumes=MediaType.APPLICATION_JSON_VALUE)
+	public ExtAjaxResponse update(@PathVariable("stockProductId") Long myId,@RequestBody StockProduct dto) 
 	{
 		try {
-			Vendor entity = vendorService.findById(myId).get();
-			if(entity!=null) {
-				BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
-				vendorService.save(entity);
-			}
+			stockProductService.save(dto);
 			return new ExtAjaxResponse(true,"更新成功！");
 		} catch (Exception e) {
 			return new ExtAjaxResponse(true,"更新失败！");
@@ -80,16 +78,14 @@ public class VendorController {
 	}
 	
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse save(@RequestBody Vendor vendor) 
+	public ExtAjaxResponse save(@RequestBody StockProduct stockProduct) 
 	{
 		try {
-			if(vendorService.findByVendorName(vendor.getVendorName())==null) {
-				vendorService.save(vendor);
-				return new ExtAjaxResponse(true,"保存成功！");
-			}else
-				return new ExtAjaxResponse(true,"保存失败！");
+			stockProductService.save(stockProduct);
+			return new ExtAjaxResponse(true,"保存成功！");
 		} catch (Exception e) {
 			return new ExtAjaxResponse(true,"保存失败！");
 		}
 	}
+	
 }
