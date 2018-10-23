@@ -14,8 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.ierp.vendormodule.product.domain.ProductDisplayDTO;
 import com.ierp.vendormodule.stockproduct.domain.StockProduct;
-import com.ierp.vendormodule.stockproduct.domain.StockProductOrderDTO;
+import com.ierp.vendormodule.stockproduct.domain.StockProductDisplayDTO;
 import com.ierp.vendormodule.stockproduct.repository.StockProductRepository;
 
 @Service
@@ -61,19 +62,19 @@ public class StockProductService implements IStockProductService{
 	}
 
 	@Override
-	public Page<StockProductOrderDTO> findAll(Pageable pageable) {
-		Page<StockProduct> entityPage = stockProductRepository.findAll(pageable);
+	public Page<StockProductDisplayDTO> findAll(Specification<StockProduct>spec,Pageable pageable) {
+		Page<StockProduct> entityPage = stockProductRepository.findAll(spec, pageable);
 		List<StockProduct> entityLists = entityPage.getContent();
-		List<StockProductOrderDTO> dtoLists = null;
+		List<StockProductDisplayDTO> dtoLists = null;
 		if(entityLists!=null) {
-			dtoLists = new ArrayList<StockProductOrderDTO>();
+			dtoLists = new ArrayList<StockProductDisplayDTO>();
 			for(StockProduct entity : entityLists) {
-				StockProductOrderDTO dto = new StockProductOrderDTO();
-				StockProductOrderDTO.entityToDto(entity, dto);
+				StockProductDisplayDTO dto = new StockProductDisplayDTO();
+				StockProductDisplayDTO.entityToDto(entity, dto);
 				dtoLists.add(dto);
 			}
 		}
-		return new PageImpl<StockProductOrderDTO>(dtoLists, pageable, entityPage.getTotalElements());	
+		return new PageImpl<StockProductDisplayDTO>(dtoLists, pageable, entityPage.getTotalElements());
 	}
 	
 }

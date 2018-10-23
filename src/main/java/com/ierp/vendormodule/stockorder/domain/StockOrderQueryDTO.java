@@ -55,7 +55,7 @@ public class StockOrderQueryDTO {
 				
 					List<Predicate> predicate = new ArrayList<>();
 					if (StringUtils.isNotBlank(stockOrderQueryDTO.getStockOrderNumber())) {
-						predicate.add(criteriaBuilder.like(root.get("orderNumber").as(String.class),
+						predicate.add(criteriaBuilder.like(root.get("stockOrderNumber").as(String.class),
 								"%" + stockOrderQueryDTO.getStockOrderNumber() + "%"));
 					}
 					if (null!=stockOrderQueryDTO.getCreateTimeStart()) {

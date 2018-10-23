@@ -15,6 +15,5 @@ public interface IStockOrderService {
 	public long count();
 	public void deleteById(Long id);
 	public void deleteAll(Long[] ids);
-	public StockOrder findByStockOrderNumber(String stockOrderNumber);
 	public Page<StockOrder> findAll(Specification<StockOrder> spec, Pageable pageable);
 }

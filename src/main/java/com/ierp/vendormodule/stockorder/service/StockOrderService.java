@@ -61,10 +61,5 @@ public class StockOrderService implements IStockOrderService{
 	public Page<StockOrder> findAll(Specification<StockOrder> spec, Pageable pageable) {
 		return stockOrderRepository.findAll(spec, pageable);
 	}
-
-	@Override
-	public StockOrder findByStockOrderNumber(String stockOrderNumber) {
-		return stockOrderRepository.findByStockOrderNumber(stockOrderNumber);
-	}
 	
 }

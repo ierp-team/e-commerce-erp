@@ -17,21 +17,25 @@ import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
 import com.ierp.vendormodule.stockorder.service.IStockOrderService;
 import com.ierp.vendormodule.stockproduct.domain.StockProduct;
-import com.ierp.vendormodule.stockproduct.domain.StockProductOrderDTO;
+import com.ierp.vendormodule.stockproduct.domain.StockProductDisplayDTO;
 import com.ierp.vendormodule.stockproduct.domain.StockProductQueryDTO;
 import com.ierp.vendormodule.stockproduct.service.IStockProductService;
 
 @RestController
-@RequestMapping("/stockproduct")
+@RequestMapping("/stockProduct")
 public class StockProductController {
 
+	@Autowired
+	private IStockOrderService stockOrderService;
 	@Autowired
 	private IStockProductService stockProductService;
 	
 	@GetMapping
-	public Page<StockProductOrderDTO> getPage(Long stockOrderId, ExtjsPageRequest pageRequest){
-		
-		return stockProductService.findAll(pageRequest.getPageable());
+	public Page<StockProductDisplayDTO> getPage(Long stockOrderId, StockProductQueryDTO stockProductQueryDTO, ExtjsPageRequest pageRequest){
+		if(null != stockOrderId) {
+			stockProductQueryDTO.setStockOrder((stockOrderService.findById(stockOrderId)).get());
+		}
+		return stockProductService.findAll(stockProductQueryDTO.getWhereClause(stockProductQueryDTO), pageRequest.getPageable());
 	}
 	
 	@GetMapping(value="{stockProductId}")

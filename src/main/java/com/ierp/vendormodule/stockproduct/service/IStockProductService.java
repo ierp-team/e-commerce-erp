@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.ierp.vendormodule.stockproduct.domain.StockProduct;
-import com.ierp.vendormodule.stockproduct.domain.StockProductOrderDTO;
+import com.ierp.vendormodule.stockproduct.domain.StockProductDisplayDTO;
 
 public interface IStockProductService {
 	public StockProduct save(StockProduct entity);
@@ -16,5 +16,5 @@ public interface IStockProductService {
 	public long count();
 	public void deleteById(Long id);
 	public void deleteAll(Long[] ids);
-	public Page<StockProductOrderDTO> findAll(Pageable pageable);
+	public Page<StockProductDisplayDTO> findAll(Specification<StockProduct>spec,Pageable pageable);
 }
