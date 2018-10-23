@@ -1,6 +1,7 @@
 package com.ierp.vendormodule.product.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ierp.common.beans.UpPic;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
+import com.ierp.common.web.SessionUtil;
 import com.ierp.vendormodule.product.domain.Product;
 import com.ierp.vendormodule.product.domain.ProductDisplayDTO;
 import com.ierp.vendormodule.product.domain.ProductQueryDTO;
@@ -36,14 +38,13 @@ public class ProductController {
 	private IVendorService vendorService;
 	
 	@GetMapping
-	public Page<ProductDisplayDTO> getPage(/*String vendorAccount,*/ Long vendorId, ProductQueryDTO productQueryDTO , ExtjsPageRequest pageRequest){
+	public Page<ProductDisplayDTO> getPage(HttpSession session, Long vendorId, ProductQueryDTO productQueryDTO , ExtjsPageRequest pageRequest){
+		
+		String userId = SessionUtil.getUserName(session);
+		productQueryDTO.setUserId(userId);
 		if(null!=vendorId) {
 			productQueryDTO.setVendor(vendorService.findById(vendorId).get());
 		}
-		
-//		if(null!=vendorAccount) {
-//			productQueryDTO.setVendor(productService.findByVendorAccount(vendorAccount));
-//		}
 		return productService.findAll(ProductQueryDTO.getWhereClause(productQueryDTO), pageRequest.getPageable());
 	}
 	

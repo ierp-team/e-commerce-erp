@@ -15,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class StockOrderQueryDTO {
 	
+		private String userId;
 		private String StockOrderNumber;
 
 		@DateTimeFormat(pattern="yyyy/MM/dd HH:mm:ss")  
@@ -46,6 +47,14 @@ public class StockOrderQueryDTO {
 		public void setCreateTimeEnd(Date createTimeEnd) {
 			this.createTimeEnd = createTimeEnd;
 		}
+		
+		public String getUserId() {
+			return userId;
+		}
+
+		public void setUserId(String userId) {
+			this.userId = userId;
+		}
 
 		@SuppressWarnings({ "serial"})
 		public static Specification<StockOrder> getWhereClause(final StockOrderQueryDTO stockOrderQueryDTO) {
@@ -66,7 +75,10 @@ public class StockOrderQueryDTO {
 						predicate.add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(Date.class),
 								stockOrderQueryDTO.getCreateTimeEnd()));
 					}
-					
+					if (StringUtils.isNotBlank(stockOrderQueryDTO.getUserId())) {
+						predicate.add(criteriaBuilder.equal(root.get("userId").as(String.class),
+								stockOrderQueryDTO.getUserId()));
+					}
 					Predicate[] pre = new Predicate[predicate.size()];
 					return query.where(predicate.toArray(pre)).getRestriction();
 				}

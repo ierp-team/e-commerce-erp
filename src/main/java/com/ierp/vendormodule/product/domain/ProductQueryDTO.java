@@ -15,6 +15,7 @@ import com.ierp.vendormodule.vendor.domain.Vendor;
 
 public class ProductQueryDTO {
 
+	private String userId;
 	private String productName;
 	private String productUuid;  //唯一识别号
 	private Vendor vendor;
@@ -42,6 +43,14 @@ public class ProductQueryDTO {
 	public void setVendor(Vendor vendor) {
 		this.vendor = vendor;
 	}
+	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	@SuppressWarnings({ "serial"})
 	public static Specification<Product> getWhereClause(final ProductQueryDTO productQueryDTO) {
@@ -61,6 +70,10 @@ public class ProductQueryDTO {
 				if (null!=productQueryDTO.getVendor()) {
 					predicate.add(criteriaBuilder.equal(root.get("vendor").as(Vendor.class),
 							productQueryDTO.getVendor()));
+				}
+				if (StringUtils.isNotBlank(productQueryDTO.getUserId())) {
+					predicate.add(criteriaBuilder.equal(root.get("userId").as(String.class),
+							productQueryDTO.getUserId()));
 				}
 				Predicate[] pre = new Predicate[predicate.size()];
 				return query.where(predicate.toArray(pre)).getRestriction();

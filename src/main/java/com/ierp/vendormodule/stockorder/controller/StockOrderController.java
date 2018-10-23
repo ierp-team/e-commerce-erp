@@ -1,5 +1,7 @@
 package com.ierp.vendormodule.stockorder.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ierp.common.beans.BeanUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
+import com.ierp.common.web.SessionUtil;
 import com.ierp.vendormodule.stockorder.domain.StockOrder;
 import com.ierp.vendormodule.stockorder.domain.StockOrderQueryDTO;
 import com.ierp.vendormodule.stockorder.service.IStockOrderService;
@@ -28,7 +31,10 @@ public class StockOrderController {
 	private IStockOrderService stockOrderService;
 	
 	@GetMapping
-	public Page<StockOrder> getPage(StockOrderQueryDTO stockOrderQueryDTO , ExtjsPageRequest pageRequest){
+	public Page<StockOrder> getPage(HttpSession session, StockOrderQueryDTO stockOrderQueryDTO , ExtjsPageRequest pageRequest){
+		
+		String userId = SessionUtil.getUserName(session);
+		stockOrderQueryDTO.setUserId(userId);
 		return stockOrderService.findAll(StockOrderQueryDTO.getWhereClause(stockOrderQueryDTO), pageRequest.getPageable());
 	}
 	
