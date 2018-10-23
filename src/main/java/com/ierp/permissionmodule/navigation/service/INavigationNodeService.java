@@ -20,4 +20,5 @@ public interface INavigationNodeService {
     public NavigationNode findByText(String text);
     //自定义查询：
     public List<TreeNode> findChildrenNodes(Long parentId,HttpSession session);
+    public List<TreeNode> findAllNodes(Long parentId);
 }

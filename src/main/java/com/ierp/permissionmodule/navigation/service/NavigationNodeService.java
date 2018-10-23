@@ -120,6 +120,42 @@ public class NavigationNodeService implements INavigationNodeService {
         return nodeList;
     }
 
+    @Override
+    public List<TreeNode> findAllNodes(Long parentId) {
+ 
+        List<TreeNode> nodeList = new ArrayList<TreeNode>();
+        
+        List<NavigationNode> displayLists ;//= new ArrayList<NavigationNode>();
+        
+        if(parentId==null) {
+            displayLists =  navigationNodeRepository.findParentNodes();
+        }else {
+            displayLists =  navigationNodeRepository.findChildNodes(parentId);
+        }
+        
+        for(NavigationNode tn : displayLists) {
+            TreeNode node  = new TreeNode();
+            
+            node.setId(tn.getId());
+            node.setText(tn.getText());
+            node.setIconCls(tn.getIconCls());
+//            node.setLeaf(tn.isLeaf());
+            node.setRowCls(tn.getRowCls());
+            node.setViewType(tn.getViewType());
+            node.setReference(tn.getReference());
+           
+            if(tn.getChildNodes()!=null) {
+                if(tn.getChildNodes().size()>0) {
+                    node.setLeaf(false);//设置为父节点
+                }else {
+                    node.setLeaf(true);//设置为子节点
+                }
+            }
+            nodeList.add(node);
+        }
+        return nodeList;
+    }
+
     
 }
 

@@ -54,6 +54,16 @@ public class NavigationNodeController {
         }
     }
     
+    @RequestMapping("/findAllNodes")
+    public @ResponseBody List<TreeNode> findAllTreeNodes(@RequestParam("node") String node )
+    {
+        if(node.equals("root")) {
+            return navigationNodeService.findAllNodes(null);
+        }else {
+            return navigationNodeService.findAllNodes(Long.parseLong(node));
+        }
+    }
+    
     @PostMapping("/saveOrUpdate")
     public @ResponseBody ExtAjaxResponse saveOrUpdate(NavigationNode navigationNode)
     {

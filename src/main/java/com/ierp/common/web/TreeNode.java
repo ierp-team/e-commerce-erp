@@ -9,16 +9,24 @@ package com.ierp.common.web;
 public class TreeNode 
 {
     private Long id;
-    private String text;//显示的节点文本
+    
+    private String text;                          //显示的节点文本
+    
     private boolean expanded = false;//节点是否展开
-    private boolean leaf = false;   //是否为子节点，根据当前节点是否有子节点判断
-    private String iconCls;   //节点图标样式
-    private String rowCls;   //节点图标样式
-    private String viewType;   //viewType
-    private String reference; //reference
-    //private List<TreeNode> children = ArrayList<TreeNode>();  //子节点集合
     
+    private boolean leaf = false;         //是否为子节点，根据当前节点是否有子节点判断
     
+    private String iconCls;                     //节点图标样式
+    
+    private String rowCls;                     //节点图标样式
+    
+    private String viewType;                 //viewType
+    
+    private String reference;                 //reference
+    
+    private String checked;                   //选择框
+    
+  
     public String getReference() {
         return reference;
     }
@@ -35,6 +43,14 @@ public class TreeNode
     public String getRowCls() {
         return rowCls;
     }
+    public String getChecked() {
+        return checked;
+    }
+
+    public void setChecked(String checked) {
+        this.checked = checked;
+    }
+
     public void setRowCls(String rowCls) {
         this.rowCls = rowCls;
     }

@@ -29,14 +29,11 @@ public class NavigationNode
     private boolean leaf;
     private String reference;
     private String nodeId;
+    private String checked;
     
-    public String getNodeId() {
-        return nodeId;
-    }
+    
 
-    public void setNodeId(String nodeId) {
-        this.nodeId = nodeId;
-    }
+    
 
     //其他属性  
     private NavigationNode parentNode;//多个子节点  对  一个父节点
@@ -86,6 +83,14 @@ public class NavigationNode
     public String getReference() {
         return reference;
     }
+    
+    public String getChecked() {
+        return checked;
+    }
+    
+    public String getNodeId() {
+        return nodeId;
+    }
 
   //setters
 
@@ -133,6 +138,13 @@ public class NavigationNode
         this.reference = reference;
     }
     
+    public void setChecked(String checked) {
+        this.checked = checked;
+    }
+    
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
     
     
     
