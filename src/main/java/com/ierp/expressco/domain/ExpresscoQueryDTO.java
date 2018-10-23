@@ -27,6 +27,7 @@ public class ExpresscoQueryDTO {
 		return expresscoName;
 	}
 
+	
 	public void setexpresscoCode(String expresscoCode) {
 		this.expresscoCode = expresscoCode;
 	}
@@ -34,6 +35,7 @@ public class ExpresscoQueryDTO {
 		this.expresscoName = expresscoName;
 	}
 
+	
 	@SuppressWarnings({ "serial"})
 	public Specification<Expressco> getWhereClause(final ExpresscoQueryDTO expresscoQueryDTO) {
 		return new Specification<Expressco>() {

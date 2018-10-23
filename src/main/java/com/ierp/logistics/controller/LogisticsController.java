@@ -1,6 +1,4 @@
-package com.ierp.goods.controller;
-
-import javax.servlet.http.HttpServletRequest;
+package com.ierp.logistics.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,32 +12,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.ierp.goods.domain.GoodsQueryDTO;
+import com.ierp.logistics.domain.LogisticsQueryDTO;
 import com.ierp.common.beans.BeanUtils;
-import com.ierp.common.beans.PhotoUploadUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
-import com.ierp.goods.domain.Goods;
-import com.ierp.goods.service.GoodsService;
+import com.ierp.logistics.domain.Logistics;
+import com.ierp.logistics.domain.LogisticsRequestDTO;
+import com.ierp.logistics.domain.LogisticsResponseDTO;
+import com.ierp.logistics.service.LogisticsService;
 
 @RestController
-@RequestMapping("/goods")
-public class GoodsController {
+@RequestMapping("/logistics")
+public class LogisticsController {
 	
 	@Autowired
-	GoodsService goodsService;
+	LogisticsService logisticsService;
 	
-	@PostMapping
-	public ExtAjaxResponse save(Goods goods, MultipartFile photoFile, HttpServletRequest request) {
+	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
+	public ExtAjaxResponse save(@RequestBody LogisticsRequestDTO dto) {
 		try {
-			String goodsPhoto = null;
-			if (photoFile!=null) {
-				goodsPhoto = PhotoUploadUtils.UpAndgetPath(photoFile, request);
-			}
-			goods.setGoodsPhoto(goodsPhoto);
-			goodsService.save(goods);
+			logisticsService.save(dto);
 			return new ExtAjaxResponse(true,"保存成功！");
 		} catch(Exception e) {
 			return new ExtAjaxResponse(true,"保存失败！");
@@ -47,12 +40,12 @@ public class GoodsController {
 	}
 	
 	@PutMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody Goods dto) {
+	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody LogisticsRequestDTO dto) {
 		try {
-			Goods entity = goodsService.findById(id).get();
+			Logistics entity = logisticsService.findById(id).get();
 			if(entity!=null) {
 				BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
-				goodsService.save(entity);
+				logisticsService.save(dto);
 				return new ExtAjaxResponse(true,"保存成功！");
 			} else {
 				return new ExtAjaxResponse(true,"保存失败！");
@@ -66,7 +59,7 @@ public class GoodsController {
 	public ExtAjaxResponse delete(@PathVariable("id") Long id) {
 		try {
 			if(id!=null) {
-				goodsService.deleteById(id);
+				logisticsService.deleteById(id);
 				return new ExtAjaxResponse(true,"删除成功！");
 			} else {
 				return new ExtAjaxResponse(true,"删除失败！");
@@ -80,7 +73,7 @@ public class GoodsController {
 	public ExtAjaxResponse deleteRows(@RequestParam(name="ids") Long[] ids) {
 		try {
 			if(ids!=null) {
-				goodsService.deleteAll(ids);
+				logisticsService.deleteAll(ids);
 				return new ExtAjaxResponse(true,"批量删除成功！");
 			} else {
 				return new ExtAjaxResponse(true,"批量删除失败！");
@@ -91,13 +84,13 @@ public class GoodsController {
 	}
 	
 	@GetMapping(value="{id}")
-	public Goods getOne(@PathVariable("id") Long id) {
-		return goodsService.findById(id).get();
+	public Logistics getOne(@PathVariable("id") Long id) {
+		return logisticsService.findById(id).get();
 	}
 	
 	@GetMapping
-	public Page<Goods> getPage(GoodsQueryDTO goodsQueryDTO , ExtjsPageRequest pageRequest) {
-		return goodsService.findAll(GoodsQueryDTO.getWhereClause(goodsQueryDTO), pageRequest.getPageable());
+	public Page<LogisticsResponseDTO> getPage(LogisticsQueryDTO logisticsQueryDTO , ExtjsPageRequest pageRequest) {
+		return logisticsService.findAll(LogisticsQueryDTO.getWhereClause(logisticsQueryDTO), pageRequest.getPageable());
 	}
 	
 }

@@ -17,8 +17,9 @@ import javax.validation.constraints.NotNull;
 public class Expressco {
 	
 	private Long id;			//物流公司id
-	private String expresscoCode;		//物流公司编号
+	private String expresscoCode;		//物流公司编码：详细编码参考《2018快递鸟接口支持快递公司编码.xlsx》
 	private String expresscoName;		//物流公司名
+	
 	
 	@Id
 	@Column(name="expressco_id")
@@ -44,6 +45,7 @@ public class Expressco {
 	public void setExpresscoName(String expresscoName) {
 		this.expresscoName = expresscoName;
 	}
+	
 	
 	@Override
 	public String toString() {

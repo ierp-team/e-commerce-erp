@@ -1,18 +1,16 @@
-package com.ierp.goods.repository;
+package com.ierp.logistics.repository;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.ierp.goods.domain.Goods;
+import com.ierp.logistics.domain.Logistics;
 
 
 /**
@@ -21,13 +19,8 @@ import com.ierp.goods.domain.Goods;
  *
  */
 @Repository
-public interface GoodsRepository extends PagingAndSortingRepository<Goods, Long>
-										, JpaSpecificationExecutor<Goods> {
+public interface LogisticsRepository extends PagingAndSortingRepository<Logistics, Long>
+										, JpaSpecificationExecutor<Logistics> {
 
-	@Query(value="SELECT sum(goods_stock) FROM t_goods WHERE goods_uuid=?1", nativeQuery=true)
-    int sumGoodsStock(String uuid);
-
-	@Query
-	List<Goods> findByGoodsUuid(String uuid);
 	
 }

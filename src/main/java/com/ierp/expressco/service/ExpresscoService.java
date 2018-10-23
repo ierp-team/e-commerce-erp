@@ -2,6 +2,7 @@ package com.ierp.expressco.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,14 +51,35 @@ public class ExpresscoService implements IExpresscoService {
 	public Page<Expressco> findAll(Specification<Expressco> spec, Pageable pageable) {
 		return expresscoRepository.findAll(spec, pageable);
 	}
+	
+	@Override
+	public List<Expressco> getList() {
+		Iterator<Expressco> iter = expresscoRepository.findAll().iterator();
+		List<Expressco> list = new ArrayList<Expressco>();
+		while (iter.hasNext()) {
+			list.add(iter.next());
+		}
+		return list;
+	}
 
 	@Override
 	public boolean existsById(Long id) {
 		return expresscoRepository.existsById(id);
 	}
 
+	@Override
 	public long count() {
 		return expresscoRepository.count();
 	}
-
+	
+	@Override
+	public Expressco findExpressco(String expresscoName) {
+		return expresscoRepository.findExpressco(expresscoName);
+	}
+	
+	@Override
+	public Expressco findByExpresscoCode(String expresscoCode) {
+		return expresscoRepository.findByExpresscoCode(expresscoCode);
+	}
+	
 }

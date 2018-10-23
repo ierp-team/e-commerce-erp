@@ -1,5 +1,7 @@
 package com.ierp.expressco.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -89,6 +91,11 @@ public class ExpresscoController {
 	@GetMapping
 	public Page<Expressco> getPage(ExpresscoQueryDTO expresscoQueryDTO , ExtjsPageRequest pageRequest) {
 		return expresscoService.findAll(expresscoQueryDTO.getWhereClause(expresscoQueryDTO), pageRequest.getPageable());
+	}
+	
+	@GetMapping("/getlist")
+	public List<Expressco> getList() {
+		return expresscoService.getList();
 	}
 	
 }
