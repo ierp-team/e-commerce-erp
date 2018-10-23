@@ -53,6 +53,9 @@ public class LogisticsRequestDTO {
 	}
 	public Float getFreight() {
 		float freight = weight.intValue()*1 + 5;
+		if (weight.intValue()==weight && weight!=0) {
+			freight = freight-1;
+		}
 		return freight;
 	}
 	/* ------------------------------------------------------------------- */

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ierp.logistics.domain.LogisticsQueryDTO;
-import com.ierp.common.beans.BeanUtils;
+//import com.ierp.common.beans.BeanUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
 import com.ierp.logistics.domain.Logistics;
 import com.ierp.logistics.domain.LogisticsRequestDTO;
-import com.ierp.logistics.domain.LogisticsResponseDTO;
+import com.ierp.logistics.domain.LogisticsDTO;
 import com.ierp.logistics.service.LogisticsService;
 
 @RestController
@@ -40,12 +40,12 @@ public class LogisticsController {
 	}
 	
 	@PutMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody LogisticsRequestDTO dto) {
+	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody LogisticsDTO dto) {
 		try {
 			Logistics entity = logisticsService.findById(id).get();
 			if(entity!=null) {
-				BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
-				logisticsService.save(dto);
+				//BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
+				logisticsService.update(dto);
 				return new ExtAjaxResponse(true,"保存成功！");
 			} else {
 				return new ExtAjaxResponse(true,"保存失败！");
@@ -89,7 +89,7 @@ public class LogisticsController {
 	}
 	
 	@GetMapping
-	public Page<LogisticsResponseDTO> getPage(LogisticsQueryDTO logisticsQueryDTO , ExtjsPageRequest pageRequest) {
+	public Page<LogisticsDTO> getPage(LogisticsQueryDTO logisticsQueryDTO , ExtjsPageRequest pageRequest) {
 		return logisticsService.findAll(LogisticsQueryDTO.getWhereClause(logisticsQueryDTO), pageRequest.getPageable());
 	}
 	

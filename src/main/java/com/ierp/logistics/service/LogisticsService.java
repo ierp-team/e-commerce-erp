@@ -2,7 +2,6 @@ package com.ierp.logistics.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,11 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.ierp.common.beans.BeanUtils;
 import com.ierp.expressco.domain.Expressco;
 import com.ierp.expressco.service.IExpresscoService;
 import com.ierp.logistics.domain.Logistics;
+import com.ierp.logistics.domain.LogisticsDTO;
 import com.ierp.logistics.domain.LogisticsRequestDTO;
-import com.ierp.logistics.domain.LogisticsResponseDTO;
 import com.ierp.logistics.repository.LogisticsRepository;
 import com.ierp.logistics.util.KdApiEOrderUtil;
 
@@ -49,6 +49,24 @@ public class LogisticsService implements ILogisticsService {
 			return null;
 		}
 	}
+	
+	@Override
+	public Logistics update(LogisticsDTO dto) {
+		try {
+			Logistics entity= findById(dto.getId()).get();
+			
+			BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
+			
+			Expressco expressco = expresscoService.findByExpresscoCode(dto.getExpresscoCode());
+			if (null!=expressco) {
+				entity.setLogisticsCompany(expressco);
+			}
+			
+			return logisticsRepository.save(entity);
+		} catch(Exception e) {
+			return null;
+		}
+	}
 
 	@Override
 	public void deleteById(Long id) {
@@ -71,19 +89,19 @@ public class LogisticsService implements ILogisticsService {
 	}
 
 	@Override
-	public Page<LogisticsResponseDTO> findAll(Specification<Logistics> spec, Pageable pageable) {
+	public Page<LogisticsDTO> findAll(Specification<Logistics> spec, Pageable pageable) {
 		Page<Logistics> entityPage = logisticsRepository.findAll(spec, pageable);
 		List<Logistics> entityLists = entityPage.getContent();
-		List<LogisticsResponseDTO> dtoLists = null;
+		List<LogisticsDTO> dtoLists = null;
 		if(entityLists!=null) {
-			dtoLists = new ArrayList<LogisticsResponseDTO>();
+			dtoLists = new ArrayList<LogisticsDTO>();
 			for(Logistics entity : entityLists) {
-				LogisticsResponseDTO dto = new LogisticsResponseDTO();
-				LogisticsResponseDTO.entityToDto(entity, dto);
+				LogisticsDTO dto = new LogisticsDTO();
+				LogisticsDTO.entityToDto(entity, dto);
 				dtoLists.add(dto);
 			}
 		}
-		return new PageImpl<LogisticsResponseDTO>(dtoLists, pageable, entityPage.getTotalElements());
+		return new PageImpl<LogisticsDTO>(dtoLists, pageable, entityPage.getTotalElements());
 	}
 
 	@Override
