@@ -1,5 +1,7 @@
 package com.ierp.vendormodule.product.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -12,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.ierp.common.beans.BeanUtils;
+import com.ierp.common.beans.UpPic;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
 import com.ierp.vendormodule.product.domain.Product;
-//import com.ierp.product.domain.ProductQueryDTO;
+import com.ierp.vendormodule.product.domain.ProductDisplayDTO;
+import com.ierp.vendormodule.product.domain.ProductQueryDTO;
 import com.ierp.vendormodule.product.service.IProductService;
+import com.ierp.vendormodule.vendor.service.IVendorService;
 
 @RestController
 @RequestMapping("/product")
@@ -27,19 +32,29 @@ public class ProductController {
 	@Autowired
 	private IProductService productService;
 	
-//	@GetMapping
-//	public Page<Product> getPage(ProductQueryDTO productQueryDTO , ExtjsPageRequest pageRequest){
-//		return productService.findAll(ProductQueryDTO.getWhereClause(productQueryDTO), pageRequest.getPageable());
-//	}
+	@Autowired
+	private IVendorService vendorService;
 	
-	@GetMapping(value="{id}")
-	public Product getOne(@PathVariable("id") Long id) 
+	@GetMapping
+	public Page<ProductDisplayDTO> getPage(/*String vendorAccount,*/ Long vendorId, ProductQueryDTO productQueryDTO , ExtjsPageRequest pageRequest){
+		if(null!=vendorId) {
+			productQueryDTO.setVendor(vendorService.findById(vendorId).get());
+		}
+		
+//		if(null!=vendorAccount) {
+//			productQueryDTO.setVendor(productService.findByVendorAccount(vendorAccount));
+//		}
+		return productService.findAll(ProductQueryDTO.getWhereClause(productQueryDTO), pageRequest.getPageable());
+	}
+	
+	@GetMapping(value="{productId}")
+	public Product getOne(@PathVariable("productId") Long id) 
 	{
 		return productService.findById(id).get();
 	}
 	
-	@DeleteMapping(value="{id}")
-	public ExtAjaxResponse delete(@PathVariable("id") Long id) 
+	@DeleteMapping(value="{productId}")
+	public ExtAjaxResponse delete(@PathVariable("productId") Long id) 
 	{
 		try {
 			if(id!=null) {
@@ -64,25 +79,31 @@ public class ProductController {
 		}
 	}
 	
-	@PutMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse update(@PathVariable("id") Long myId,@RequestBody Product dto) 
+	@PutMapping(value="{productId}")
+	public ExtAjaxResponse update(@PathVariable("productId") Long myId,ProductDisplayDTO dto,MultipartFile productImage,HttpServletRequest request) 
 	{
 		try {
-			Product entity = productService.findById(myId).get();
-			if(entity!=null) {
-				BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
-				productService.save(entity);
-			}
-			return new ExtAjaxResponse(true,"更新成功！");
+				String productPic = null;
+				if(productImage!=null) {
+					productPic = UpPic.UpAndgetPath(productImage, request);
+				}
+				dto.setProductPic(productPic);
+				productService.save(dto);
+				return new ExtAjaxResponse(true,"更新成功！");
 		} catch (Exception e) {
 			return new ExtAjaxResponse(true,"更新失败！");
 		}
 	}
 	
-	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse save(@RequestBody Product product) 
+	@PostMapping
+	public ExtAjaxResponse save(ProductDisplayDTO product,MultipartFile productImage,HttpServletRequest request) 
 	{
 		try {
+			String productPic = null;
+			if(productImage!=null) {
+				productPic = UpPic.UpAndgetPath(productImage, request);
+			}
+			product.setProductPic(productPic);
 			productService.save(product);
 			return new ExtAjaxResponse(true,"保存成功！");
 		} catch (Exception e) {
@@ -90,19 +111,4 @@ public class ProductController {
 		}
 	}
 	
-	@RequestMapping("data")
-	public String testData() {
-		try {
-			for(int i = 0; i < 10; i++) {
-				Product product = new Product();
-				product.setProduct_name("产品"+i);
-				product.setProduct_price("￥"+i);
-				
-				productService.save(product);
-			}
-			return "success:true";
-		} catch (Exception e) {
-			return "success:false";
-		}
-	}
 }

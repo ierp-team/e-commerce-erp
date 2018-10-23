@@ -3,6 +3,8 @@ package com.ierp.permissionmodule.navigation.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import com.ierp.common.web.TreeNode;
 import com.ierp.permissionmodule.navigation.domain.NavigationNode;
 
@@ -15,7 +17,7 @@ public interface INavigationNodeService {
     //通用查询
     public Optional<NavigationNode> findOne(Long id);
     public List<NavigationNode> findAll();
-    
+    public NavigationNode findByText(String text);
     //自定义查询：
-    public List<TreeNode> findChildrenNodes(Long parentId);
+    public List<TreeNode> findChildrenNodes(Long parentId,HttpSession session);
 }

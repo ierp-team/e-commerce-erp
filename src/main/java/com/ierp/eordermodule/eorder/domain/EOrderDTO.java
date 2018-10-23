@@ -1,12 +1,16 @@
 package com.ierp.eordermodule.eorder.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ierp.eordermodule.util.EOrderStatus;
+import com.ierp.expressco.domain.Expressco;
 
 public class EOrderDTO {
-    //基本信息
     private Long id;
     private String orderNumber;
     private String salePlatform;
@@ -22,24 +26,28 @@ public class EOrderDTO {
     private EOrderStatus orderStatus;
     //物流信息
     private Date diliverTime;
-    
     private String expressNumber;   
     private String logisticsCompany;
+    
     private Float freight;
-    private String logisticsInformation;    
-    /**------------流程数据--------------**/
-    /*任务*/
-    private String taskId;
-    private String taskName;
-    private Date   taskCreateTime;
-    private String assignee;
-    private String taskDefinitionKey;
-    /*流程实例*/
-    private String processInstanceId;
-    /*流程图定义*/
-    private String processDefinitionId;
-    private boolean suspended;
-    private int version;
+    private String logisticsInformation;
+    
+    public static void entityToDto(EOrder entity,EOrderDTO dto ) {
+        if(entity!=null){
+            BeanUtils.copyProperties(entity, dto);
+            Expressco expressco = entity.getLogisticsCompany();
+            if(expressco != null){
+                dto.setLogisticsCompany(expressco.getExpresscoName());
+            }else{
+                dto.setLogisticsCompany(null);
+            }          
+        }
+    }
+    //前到后：2.维护多个对象 的数据 以及 对象之间的关联关系 (创建关联、更新关联)
+    public static void dtoToEntity(EOrderDTO dto ,EOrder entity) {
+        BeanUtils.copyProperties(dto, entity); 
+    }
+ 
     public Long getId() {
         return id;
     }
@@ -58,13 +66,15 @@ public class EOrderDTO {
     public void setSalePlatform(String salePlatform) {
         this.salePlatform = salePlatform;
     }
+    
     @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
     public Date getCreateTime() {
         return createTime;
     }
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }    
+    }
+    
     @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
     public Date getOverTime() {
         return overTime;
@@ -131,59 +141,5 @@ public class EOrderDTO {
     }
     public void setLogisticsInformation(String logisticsInformation) {
         this.logisticsInformation = logisticsInformation;
-    }
-    public String getTaskId() {
-        return taskId;
-    }
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
-    }
-    public String getTaskName() {
-        return taskName;
-    }
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-    public Date getTaskCreateTime() {
-        return taskCreateTime;
-    }
-    public void setTaskCreateTime(Date taskCreateTime) {
-        this.taskCreateTime = taskCreateTime;
-    }
-    public String getAssignee() {
-        return assignee;
-    }
-    public void setAssignee(String assignee) {
-        this.assignee = assignee;
-    }
-    public String getTaskDefinitionKey() {
-        return taskDefinitionKey;
-    }
-    public void setTaskDefinitionKey(String taskDefinitionKey) {
-        this.taskDefinitionKey = taskDefinitionKey;
-    }
-    public String getProcessInstanceId() {
-        return processInstanceId;
-    }
-    public void setProcessInstanceId(String processInstanceId) {
-        this.processInstanceId = processInstanceId;
-    }
-    public String getProcessDefinitionId() {
-        return processDefinitionId;
-    }
-    public void setProcessDefinitionId(String processDefinitionId) {
-        this.processDefinitionId = processDefinitionId;
-    }
-    public boolean isSuspended() {
-        return suspended;
-    }
-    public void setSuspended(boolean suspended) {
-        this.suspended = suspended;
-    }
-    public int getVersion() {
-        return version;
-    }
-    public void setVersion(int version) {
-        this.version = version;
     }
 }

@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,6 +34,17 @@ public class EOrder {
     private Date createTime;
     private Date overTime;    
     private Float totalPrice;
+    
+    //工作流管理
+    private Date matchTime;
+    private Date pickTime;
+    private Date addTime;
+    private Date modifyTime;
+    private Date deliverTime;
+    private Date receiveTime;
+    private Date checkTime;
+    private Date enterTime;
+    private Date cancelTime;
    
     //客户信息
     private String address;
@@ -93,7 +106,7 @@ public class EOrder {
     public String getPhone() {
         return phone;
     }
-
+    @Enumerated(EnumType.STRING)
     public EOrderStatus getOrderStatus() {
         return orderStatus;
     }
@@ -127,6 +140,53 @@ public class EOrder {
     public String getProcessInstanceId() {
         return processInstanceId;
     }
+    
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
+    public Date getMatchTime() {
+        return matchTime;
+    }
+    
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
+    public Date getPickTime() {
+        return pickTime;
+    }
+    
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
+    public Date getDeliverTime() {
+        return deliverTime;
+    }
+
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
+    public Date getReceiveTime() {
+        return receiveTime;
+    }
+
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
+    public Date getCheckTime() {
+        return checkTime;
+    }
+
+    
+    public Date getEnterTime() {
+        return enterTime;
+    }
+    
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
+    public Date getCancelTime() {
+        return cancelTime;
+    }
+
+    
     //setters
 
     public void setId(Long id) {
@@ -197,5 +257,36 @@ public class EOrder {
     public void setProcessInstanceId(String processInstanceId) {
         this.processInstanceId = processInstanceId;
     }
+    public void setMatchTime(Date matchTime) {
+        this.matchTime = matchTime;
+    }
 
+    public void setPickTime(Date pickTime) {
+        this.pickTime = pickTime;
+    }
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public void setDeliverTime(Date deliverTime) {
+        this.deliverTime = deliverTime;
+    }
+
+    public void setReceiveTime(Date receiveTime) {
+        this.receiveTime = receiveTime;
+    }
+
+    public void setCheckTime(Date checkTime) {
+        this.checkTime = checkTime;
+    }
+
+    public void setEnterTime(Date enterTime) {
+        this.enterTime = enterTime;
+    }
+    public void setCancelTime(Date cancelTime) {
+        this.cancelTime = cancelTime;
+    }
 }

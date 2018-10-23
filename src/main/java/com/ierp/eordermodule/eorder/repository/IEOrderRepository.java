@@ -21,7 +21,7 @@ import com.ierp.eordermodule.eorderproduct.domain.EOrderProduct;
 public interface IEOrderRepository extends PagingAndSortingRepository<EOrder, Long>,JpaSpecificationExecutor<EOrder>{
 
     @Query("from EOrder eOrder where eOrder.orderStatus = ?1") 
-    public Page<EOrder> findEOrder(String orderStatus,Pageable pageable); 
+    public List<EOrder> findEOrder(String orderStatus); 
     
     
 }

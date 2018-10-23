@@ -13,6 +13,6 @@ Ext.define('Admin.view.order.OrderViewModel', {
     ],
 
     stores: {
-		orderLists: {type: 'orderGridStroe'}
+		orderLists: {type: 'orderGridStore'}
     }
 });

@@ -20,7 +20,7 @@ import com.ierp.activiti.util.WorkflowVariable;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
 import com.ierp.common.web.SessionUtil;
-import com.ierp.eordermodule.eorder.domain.EOrderDTO;
+import com.ierp.eordermodule.eorder.domain.EOrderManageDTO;
 import com.ierp.eordermodule.eorder.service.IEOrderService;
 
 
@@ -54,13 +54,12 @@ public class EOrderManageController {
      * @return
      */
     @RequestMapping(value = "/start")
-    public  ExtAjaxResponse start(@RequestParam(name = "id") Long leaveId, HttpSession session) {
+    public  ExtAjaxResponse start(@RequestParam(name = "id") Long eOrderId, HttpSession session) {
         try {
             String userId = SessionUtil.getUserName(session);
             Map<String, Object> variables = new HashMap<String, Object>();
-            variables.put("deptLeader", "financeManager");
             variables.put("applyUserId", userId);
-            eOrderService.startWorkflow(userId, leaveId, variables);
+            eOrderService.startWorkflow(userId, eOrderId, variables);
             return new ExtAjaxResponse(true, "操作成功!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,8 +77,8 @@ public class EOrderManageController {
      * @return
      */
     @RequestMapping(value = "/tasks")
-    public  Page<EOrderDTO> findTodoTasks(HttpSession session, ExtjsPageRequest pageable) {
-        Page<EOrderDTO> page = new PageImpl<EOrderDTO>(new ArrayList<EOrderDTO>(), pageable.getPageable(), 0);
+    public  Page<EOrderManageDTO> findTodoTasks(HttpSession session, ExtjsPageRequest pageable) {
+        Page<EOrderManageDTO> page = new PageImpl<EOrderManageDTO>(new ArrayList<EOrderManageDTO>(), pageable.getPageable(), 0);
         try {
             page = eOrderService.findTodoTasks(SessionUtil.getUserName(session), pageable.getPageable());
         } catch (Exception e) {
@@ -114,10 +113,10 @@ public class EOrderManageController {
         try {
             Map<String, Object> variables = var.getVariableMap();
             eOrderService.complete(taskId, variables);
-            return new ExtAjaxResponse(true, "任务签收成功!");
+            return new ExtAjaxResponse(true, "任务成功!");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ExtAjaxResponse(false, "任务签收失败!");
+            return new ExtAjaxResponse(false, "任务失败!");
         }
     }
 }

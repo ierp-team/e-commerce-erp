@@ -20,6 +20,7 @@ public interface IGoodsService {
 	public Page<Goods> findAll(Specification<Goods> spec, Pageable pageable);
 	public boolean existsById(Long id);
 	public long count();
+	public List<Goods> findAll();
 	
 	/* 自定义接口 */
 	public int sumGoodsStock(String uuid);			//计算同一uuid商品的库存总量

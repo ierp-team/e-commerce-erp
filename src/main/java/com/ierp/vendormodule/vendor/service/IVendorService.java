@@ -16,5 +16,6 @@ public interface IVendorService {
 	public long count();
 	public void deleteById(Long id);
 	public void deleteAll(Long[] ids);
+	public Vendor findByVendorName(String vendorName);
 	public Page<Vendor> findAll(Specification<Vendor> spec, Pageable pageable);
 }

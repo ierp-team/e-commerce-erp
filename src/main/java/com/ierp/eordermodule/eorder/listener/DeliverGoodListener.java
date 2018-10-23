@@ -1,5 +1,7 @@
 package com.ierp.eordermodule.eorder.listener;
 
+import java.util.Date;
+
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
@@ -30,6 +32,7 @@ public class DeliverGoodListener implements TaskListener{
         EOrder eOrder = eOrderService.findOneById(new Long(processInstance.getBusinessKey())); 
         
         eOrder.setOrderStatus(EOrderStatus.DELIVERED);
+        eOrder.setDeliverTime(new Date());
     }
 
 }

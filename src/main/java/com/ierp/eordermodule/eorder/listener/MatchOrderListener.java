@@ -1,5 +1,6 @@
 package com.ierp.eordermodule.eorder.listener;
 
+import java.util.Date;
 import java.util.List;
 
 import org.activiti.engine.RuntimeService;
@@ -41,28 +42,43 @@ public class MatchOrderListener implements TaskListener {
         
         //计数器
         int count = 0;
+        System.out.println("进入监听器：MatchOrderListener");
         
         String processInstanceId = delegateTask.getProcessInstanceId();
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         EOrder eOrder = eOrderService.findOneById(new Long(processInstance.getBusinessKey()));   
-        
+
         List <EOrderProduct> eOrderPoductList= eOrder.getOrderProducts();
-        for(EOrderProduct eOrderPoduct : eOrderPoductList){
-            //Goods good = goodsService.findById(eOrderPoduct.getGood().getGoodsId()).get();
-            if(!(goodsService.existsById(eOrderPoduct.getGood().getId()))){
-                eOrderPoduct.setOrderProductStatus(EOrderProductStatus.NOEXIST);
-                count++;
-            }else{
-                eOrderPoduct.setOrderProductStatus(EOrderProductStatus.EXIST);
+        if(eOrderPoductList!=null){
+            for(EOrderProduct eOrderPoduct : eOrderPoductList){
+                //Goods good = goodsService.findById(eOrderPoduct.getGood().getGoodsId()).get();
+                Goods good = eOrderPoduct.getGood();
+                if(good != null){
+                    if(!(goodsService.existsById(good.getId()))){
+                        eOrderPoduct.setOrderProductStatus(EOrderProductStatus.NOEXIST);
+                        count++;
+                    }else{
+                        eOrderPoduct.setOrderProductStatus(EOrderProductStatus.EXIST);
+                    }
+                }else{
+                    count++;
+                    eOrderPoduct.setOrderProductStatus(EOrderProductStatus.NOEXIST);
+                }
             }
         }
+        
         if(count>0){
             eOrder.setOrderStatus(EOrderStatus.NOMATCH);
-            taskService.setVariable(delegateTask.getId(), "isExist", false);
+            eOrder.setMatchTime(new Date());
+            eOrderService.save(eOrder);
+            delegateTask.setVariable("isExist", false);
+            //taskService.setVariable(delegateTask.getId(), "isExist", false);
         }else{
-            eOrder.setOrderStatus(EOrderStatus.MATCHED);
-            taskService.setVariable(delegateTask.getId(), "isExist", true);
+            eOrder.setMatchTime(new Date());
+            eOrderService.save(eOrder);
+            delegateTask.setVariable("isExist", true);
         }
+        System.out.println("监听器：MatchOrderListener完成监听");
     }
 
 }

@@ -2,6 +2,8 @@ package com.ierp.eordermodule.eorderproduct.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,10 +50,12 @@ public class EOrderProduct {
         return eOrder;
     }
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "goodsCode",referencedColumnName="goodsCode", insertable = false, updatable = false, unique = true)
+    //@JoinColumn(name = "goodsCode",referencedColumnName="goodsCode")
     public Goods getGood() {
         return good;
     }
+    
+    @Enumerated(EnumType.STRING)
     public EOrderProductStatus getOrderProductStatus() {
         return orderProductStatus;
     }

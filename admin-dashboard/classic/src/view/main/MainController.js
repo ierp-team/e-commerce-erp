@@ -27,7 +27,7 @@ Ext.define('Admin.view.main.MainController', {
             store = navigationList.getStore(),
             node = store.findNode('routeId', hashTag) ||
                    store.findNode('viewType', hashTag),
-            view = (node && node.get('viewType')) || 'page404',
+            view = (node && node.get('viewType')),// || 'page404'
             lastView = me.lastView,
             existingItem = mainCard.child('component[routeId=' + hashTag + ']'),
             newView;
@@ -76,11 +76,52 @@ Ext.define('Admin.view.main.MainController', {
     },
 
     onNavigationTreeSelectionChange: function (tree, node) {
+        // var gird = Ext.getCmp('originalOrderGridPanel');// Ext.getCmp(）需要在OrderPanel设置id属性
+        // var store = grid.getStore();
+		// Ext.apply(store.proxy.extraParams, {orderStatus:'ORIGINAL'});				
+		// store.load({params:{start:0, limit:20, page:1}});
         var to = node && (node.get('routeId') || node.get('viewType'));
+        var nodeKey = node.get('viewType');
+        var store =	Ext.data.StoreManager.lookup('eOrderStore');
 
         if (to) {
-            this.redirectTo(to);
+            
+            this.redirectTo(to);             
         }
+        // if(nodeKey == 'originalOrderPanel'){  
+            
+        //     //Ext.apply(store.proxy.extraParams, {orderStatus:""});		
+        //     //Ext.apply(store.proxy.extraParams, {orderStatus:'ORIGINAL'});
+        //     // store.on('beforeload',function(){  
+        //     //     Ext.Msg.alert(nodeKey);
+        //         Ext.apply(store.proxy.extraParams, {orderStatus:'ORIGINAL'}); 
+        //     // });
+        //     // store.load({params:{start:0, limit:20, page:1}});  				               
+        // }else if(nodeKey == 'noMatchOrderPanel'){
+        //     Ext.Msg.alert(nodeKey);
+        //     Ext.apply(store.proxy.extraParams, {orderStatus:'NOMATCH'});
+        //     store.load({params:{start:0, limit:20, page:1}}); 	
+        // }else if(nodeKey == 'assignedOrderPanel'){
+        //     Ext.Msg.alert(nodeKey);
+        //     Ext.apply(store.proxy.extraParams, {orderStatus:'ASSIGNED'});
+        //     store.load({params:{start:0, limit:20, page:1}}); 	
+        // }else if(nodeKey == 'noAssignOrderPanel'){
+        //     Ext.Msg.alert(nodeKey);
+        //     Ext.apply(store.proxy.extraParams, {orderStatus:'NOASSIGN'});
+        //     store.load({params:{start:0, limit:20, page:1}}); 	
+        // }else if(nodeKey == 'deliveredOrderPanel'){
+        //     Ext.Msg.alert(nodeKey);
+        //     Ext.apply(store.proxy.extraParams, {orderStatus:'DELIVERED'});
+        //     store.load({params:{start:0, limit:20, page:1}}); 	
+        // }else if(nodeKey == 'noDeliverOrderPanel'){
+        //     Ext.Msg.alert(nodeKey);
+        //     Ext.apply(store.proxy.extraParams, {orderStatus:'NODELIVER'});
+        //     store.load({params:{start:0, limit:20, page:1}}); 	
+        // }else if(nodeKey == 'completedOrderPanel'){
+        //     Ext.Msg.alert(nodeKey);
+        //     Ext.apply(store.proxy.extraParams, {orderStatus:'COMPLETED'});
+        //     store.load({params:{start:0, limit:20, page:1}}); 	
+        // }
     },
 
     onToggleNavigationSize: function () {
@@ -138,14 +179,56 @@ Ext.define('Admin.view.main.MainController', {
             }
         }
     },
+    logoutButton: function(){
+		var me = this;
+        Ext.Ajax.request({
+            url: 'logout',
+            method: 'post',
+            success: function(response, options) {
+            	var json = Ext.util.JSON.decode(response.responseText);
+	            if(json.success){
+	            	me.redirectTo('login', true);
+	            	window.location.reload();
+		        }else{
+		        	Ext.Msg.alert('登出失败', json.msg);
+		        }
+            }
+        });
+    },
+
 
     onMainViewRender:function() {
         if (!window.location.hash) {
-            this.redirectTo("dashboard");
+            this.redirectTo("login");
         }
     },
 
     onRouteChange:function(id){
         this.setCurrentView(id);
-    }
+        //登录校验:没有登录无法访问其他模块.
+        /*
+        var me = this;
+	    if(loginUser!="null" || id=="login"){
+			me.setCurrentView(id);
+		}else{
+			Ext.Msg.alert('警告', '非法登录系统!',function(){
+				me.setCurrentView('login');
+			});
+		}*/
+
+    },
+
+    //状态订单相应函数
+    // originalOrderPanelShow:function(btn){
+    //     // var to = node && (node.get('routeId') || node.get('viewType'));
+
+    //     // if (to) {
+    //     //     this.redirectTo(to);
+    //     // }
+    //     Ext.Msg.alert("originalOrderPanelShow!");
+    //     var store = Ext.getCmp('originalOrderGridPanel').getStore();// Ext.getCmp(）需要在OrderPanel设置id属性
+	// 	Ext.apply(store.proxy.extraParams, {orderStatus:'ORIGINAL'});
+				
+	// 	store.load();
+    // }
 });

@@ -14,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.ierp.eordermodule.eorder.domain.EOrder;
 import com.ierp.eordermodule.eorder.domain.EOrderQueryDTO;
+import com.ierp.eordermodule.util.EOrderStatus;
 
 public class EOrderQueryDTO {
     
@@ -21,9 +22,18 @@ public class EOrderQueryDTO {
         private Date startTime_to;
         private String phone;
         private String expressNumber;
+        private EOrderStatus orderStatus;
        
         
         
+        public EOrderStatus getOrderStatus() {
+            return orderStatus;
+        }
+
+        public void setOrderStatus(EOrderStatus orderStatus) {
+            this.orderStatus = orderStatus;
+        }
+
         @DateTimeFormat(pattern="yyyy/MM/dd HH:mm:ss")  
         public Date getStartTime_from() {
             return startTime_from;
@@ -67,23 +77,28 @@ public class EOrderQueryDTO {
                 List<Predicate> predicate = new ArrayList<>();
 
                 if (null!=leaveQueryDTO.getStartTime_from()) {
-                    predicate.add(criteriaBuilder.greaterThanOrEqualTo(root.get("startTime").as(Date.class),
+                    predicate.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(Date.class),
                             leaveQueryDTO.getStartTime_from()));
                 }
                 
                 if (null!=leaveQueryDTO.getStartTime_to()) {
-                    predicate.add(criteriaBuilder.lessThanOrEqualTo(root.get("endTime").as(Date.class),
+                    predicate.add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(Date.class),
                             leaveQueryDTO.getStartTime_to()));
                 }
                 
-                if (null!=leaveQueryDTO.getPhone()) {
-                    predicate.add(criteriaBuilder.equal(root.get("userId").as(String.class),
+                if (leaveQueryDTO.getPhone()!=""&&leaveQueryDTO.getPhone()!=null) {
+                    predicate.add(criteriaBuilder.equal(root.get("phone").as(String.class),
                             leaveQueryDTO.getPhone()));
                 }
                 
-                if (null!=leaveQueryDTO.getExpressNumber()) {
-                    predicate.add(criteriaBuilder.equal(root.get("userId").as(String.class),
+                if (leaveQueryDTO.getExpressNumber()!=""&&leaveQueryDTO.getPhone()!=null) {
+                    predicate.add(criteriaBuilder.equal(root.get("expressNumber").as(String.class),
                             leaveQueryDTO.getExpressNumber()));
+                }
+                
+                if (null!=leaveQueryDTO.getOrderStatus()) {
+                    predicate.add(criteriaBuilder.equal(root.get("orderStatus").as(String.class),
+                            leaveQueryDTO.getOrderStatus().toString()));
                 }
                 
                 Predicate[] pre = new Predicate[predicate.size()];

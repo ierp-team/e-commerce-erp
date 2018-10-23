@@ -1,4 +1,4 @@
-Ext.define('Admin.view.main.MainContainerWrap', {
+ Ext.define('Admin.view.main.MainContainerWrap', {
     extend: 'Ext.container.Container',
     xtype: 'maincontainerwrap',
 

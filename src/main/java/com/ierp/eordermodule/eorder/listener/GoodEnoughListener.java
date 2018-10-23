@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.delegate.TaskListener;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import com.ierp.goods.service.IGoodsService;
 
 @Component
 @Transactional
-public class GoodEnoughListener implements TaskListener{
+public class GoodEnoughListener implements ExecutionListener{
     private static final long serialVersionUID = 1L;
     @Autowired
     private IEOrderService eOrderService;
@@ -34,12 +36,13 @@ public class GoodEnoughListener implements TaskListener{
     
     @Autowired
     private IGoodsService goodsService;
-    
-    public void notify(DelegateTask delegateTask) {
-        //订单分配成功与否判断计数器
+      
+    @Override
+    public void notify(DelegateExecution execution) {
+      //订单分配成功与否判断计数器
         int count =0;
-        
-        String processInstanceId = delegateTask.getProcessInstanceId();
+        System.out.println("进入监听器：GoodEnoughListener");
+        String processInstanceId = execution.getProcessInstanceId();
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         EOrder eOrder = eOrderService.findOneById(new Long(processInstance.getBusinessKey()));   
         
@@ -57,11 +60,15 @@ public class GoodEnoughListener implements TaskListener{
             }
         }
         if(count == 0){
-            eOrder.setOrderStatus(EOrderStatus.MATCHED );
-            taskService.setVariable(delegateTask.getId(), "isEnough", true);
+            eOrder.setOrderStatus(EOrderStatus.ASSIGNED );
+            execution.setVariable("isEnough", true);
+            //taskService.setVariable(delegateTask.getId(), "isEnough", true);
         }else{
-            eOrder.setOrderStatus(EOrderStatus.NOMATCH);
-            taskService.setVariable(delegateTask.getId(), "isEnough", false);
-        }      
+            eOrder.setOrderStatus(EOrderStatus.NOASSIGN);
+            execution.setVariable("isEnough", false);
+            //taskService.setVariable(delegateTask.getId(), "isEnough", false);
+        }    
+        System.out.println("监听器：GoodEnoughListener完成监听");
+        
     }
 }

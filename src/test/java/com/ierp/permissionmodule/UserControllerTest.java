@@ -30,7 +30,7 @@ public class UserControllerTest {
     { 
         try {            	
             User user1 = new User();
-            user1.setId("ghb");
+            user1.setId("gaohaobo");
             user1.setPassword("gh");
             user1.setUserName("高浩博");
             user1.setUser_num("001");

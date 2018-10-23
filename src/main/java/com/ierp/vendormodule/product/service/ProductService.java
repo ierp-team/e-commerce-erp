@@ -9,12 +9,16 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ierp.vendormodule.product.domain.Product;
+import com.ierp.vendormodule.product.domain.ProductDisplayDTO;
 import com.ierp.vendormodule.product.repository.ProductRepository;
+import com.ierp.vendormodule.vendor.domain.Vendor;
+import com.ierp.vendormodule.vendor.repository.VendorRepository;
 
 @Service
 @Transactional
@@ -22,8 +26,23 @@ public class ProductService implements IProductService{
 
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private VendorRepository vendorRepository;
+	
 	@Override
-	public Product save(Product entity) {
+	public Product save(ProductDisplayDTO dto) {
+		Product entity;
+		if(null!=dto.getProductId()) {
+			entity = productRepository.findById(dto.getProductId()).get();
+		} else {
+			entity = new Product();
+		}
+		ProductDisplayDTO.dtoToEntity(dto, entity);
+		//关联关系
+		if(dto.getVendorId()!=null) {
+			Optional<Vendor> vendor = vendorRepository.findById(dto.getVendorId());
+			entity.setVendor(vendor.get());
+		}
 		return productRepository.save(entity);
 	}
 
@@ -56,9 +75,25 @@ public class ProductService implements IProductService{
 			productRepository.deleteAll(products);
 		}
 	}
+	
 	@Override
-	public Page<Product> findAll(Specification<Product> spec, Pageable pageable) {
-		return productRepository.findAll(spec, pageable);
+	public Page<ProductDisplayDTO> findAll(Specification<Product> spec, Pageable pageable) {
+		Page<Product> entityPage = productRepository.findAll(spec, pageable);
+		List<Product> entityLists = entityPage.getContent();
+		List<ProductDisplayDTO> dtoLists = null;
+		if(entityLists!=null) {
+			dtoLists = new ArrayList<ProductDisplayDTO>();
+			for(Product entity : entityLists) {
+				ProductDisplayDTO dto = new ProductDisplayDTO();
+				ProductDisplayDTO.entityToDto(entity, dto);
+				dtoLists.add(dto);
+			}
+		}
+		return new PageImpl<ProductDisplayDTO>(dtoLists, pageable, entityPage.getTotalElements());	
 	}
 
+//	@Override
+//	public Vendor findByVendorAccount(String vendorAccount) {
+//		return productRepository.findByVendorAccount(vendorAccount);
+//	}
 }

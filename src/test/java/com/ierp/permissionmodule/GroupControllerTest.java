@@ -22,15 +22,15 @@ public class GroupControllerTest {
 	@Test
 	public void GroupInitData() {
 		try {
-			Group g1 = new Group();
-			g1.setGroupName("superAdministrator");
-            g1.setName("超级管理员");
-            g1.setType("有最高权限");
-            
-            Group g2 = new Group();
-            g2.setGroupName("administrator");
-            g2.setName("管理员");
-            g2.setType("可以查看所有模块");
+//			Group g1 = new Group();
+//			g1.setGroupName("superAdministrator");
+//            g1.setName("超级管理员");
+//            g1.setType("有最高权限");
+//            
+//            Group g2 = new Group();
+//            g2.setGroupName("administrator");
+//            g2.setName("管理员");
+//            g2.setType("可以查看所有模块");
             
             Group g3 = new Group();
             g3.setGroupName("salesperson");
@@ -47,11 +47,11 @@ public class GroupControllerTest {
             g5.setName("仓库人员");
             g5.setType("可以查看……？");
             
-            groupService.save(g1);
+            //groupService.save(g1);
             groupService.save(g5);
             
             List<Group> entityLists = new ArrayList<Group>();
-            entityLists.add(g2);
+            //entityLists.add(g2);
             entityLists.add(g3);
             entityLists.add(g4);
             groupService.saveAll(entityLists);

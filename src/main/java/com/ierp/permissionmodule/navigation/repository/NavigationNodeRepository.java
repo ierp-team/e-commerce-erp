@@ -20,7 +20,7 @@ public interface NavigationNodeRepository extends CrudRepository<NavigationNode,
      * @return 节点集合 List<NavigationNode>
      */
     @Query("from NavigationNode c where c.parentNode.id = null")
-    public List<NavigationNode> findParentNodes();
+    public List<NavigationNode> findParentNodes();//String groupName
     
     /**
      * 根据父节点ID查询出子节点
@@ -28,6 +28,19 @@ public interface NavigationNodeRepository extends CrudRepository<NavigationNode,
      *      parentId != null时 默认返回子节点
      * @return 节点集合 List<NavigationNode>
      */
-    @Query("from NavigationNode c where c.parentNode.id = ?1")
-    public List<NavigationNode> findChildNodes(Long parentId);//null
+    @Query("from NavigationNode c  where c.parentNode.id =?1 ")
+    //@Query(nativeQuery = true,value="select from NavigationNode c join Group g  where c.parentNode.id and c  ")
+    public List<NavigationNode> findChildNodes(Long parentId);//null----,String groupName
+    
+    /**
+     * 根据groupName查询出所有符合条件的节点
+     *
+     * @return 节点集合 List<NavigationNode>
+     */
+    @Query("from NavigationNode c where c.text= ?1")
+    public NavigationNode findByText(String text);
+    
+    
+    @Query("from NavigationNode c where c.viewType= ?1")
+    public NavigationNode findByViewType(String viewType);
 }

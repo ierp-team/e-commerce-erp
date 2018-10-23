@@ -21,8 +21,11 @@ import com.ierp.activiti.domain.WorkTaskDTO;
 import com.ierp.activiti.service.IWorkTaskService;
 import com.ierp.eordermodule.eorder.domain.EOrder;
 import com.ierp.eordermodule.eorder.domain.EOrderDTO;
+import com.ierp.eordermodule.eorder.domain.EOrderManageDTO;
 import com.ierp.eordermodule.eorder.repository.IEOrderRepository;
 import com.ierp.eordermodule.eorderproduct.domain.EOrderProduct;
+import com.ierp.eordermodule.eorderproduct.domain.EOrderProductDTO;
+import com.ierp.eordermodule.util.EOrderStatus;
 
 
 /**
@@ -85,14 +88,38 @@ public class EOrderService implements IEOrderService {
 
     @Override
     @Transactional
-    public Page<EOrder> queryEOrders(Specification<EOrder> spec, Pageable pageable) {
-        return eOrderRepository.findAll(spec, pageable);
+    public Page<EOrderDTO> queryEOrders(Specification<EOrder> spec, Pageable pageable) {
+        
+        Page<EOrder> eOrderPage =  eOrderRepository.findAll(spec, pageable);
+        List<EOrder> eOrderList = eOrderPage.getContent();
+        
+        List <EOrderDTO> eOrderDTOList = new ArrayList<EOrderDTO>();
+        
+        if(eOrderList!=null){       
+            for(EOrder eOrder:eOrderList){
+                EOrderDTO eOrderDTO = new EOrderDTO();
+                EOrderDTO.entityToDto(eOrder, eOrderDTO);
+                eOrderDTOList.add(eOrderDTO);
+            }
+        }
+        return  new PageImpl<EOrderDTO>(eOrderDTOList,pageable, eOrderDTOList.size());
     }
 
-    @Override
-    public Page<EOrder> getEOrders(String orderStatus, Pageable pageable) {
-        return eOrderRepository.findEOrder(orderStatus, pageable);
-    }
+//    @Override
+//    public Page<EOrderDTO> getEOrders(String orderStatus, Pageable pageable) {
+//        
+//        List<EOrder> eOrderList  = eOrderRepository.findEOrder(orderStatus);
+//        List <EOrderDTO> eOrderDTOList = new ArrayList<EOrderDTO>();
+//        
+//        if(eOrderList!=null){       
+//            for(EOrder eOrder:eOrderList){
+//                EOrderDTO eOrderDTO = new EOrderDTO();
+//                EOrderDTO.entityToDto(eOrder, eOrderDTO);
+//                eOrderDTOList.add(eOrderDTO);
+//            }
+//        }
+//        return  new PageImpl<EOrderDTO>(eOrderDTOList,pageable, eOrderDTOList.size());
+//    }
     
     
     /*----------------------------------------------流程业务--------------------------------------------*/
@@ -104,16 +131,17 @@ public class EOrderService implements IEOrderService {
     * @return
     */
 
-   public void startWorkflow(String userId ,Long leaveId, Map<String, Object> variables) 
+   public void startWorkflow(String userId ,Long eOrderId, Map<String, Object> variables) 
    {
        //1.声明流程实例
        ProcessInstance processInstance = null;
        //2.获取创建好的请假实例
-       EOrder eOrder = eOrderRepository.findById(leaveId).get();
+       EOrder eOrder = eOrderRepository.findById(eOrderId).get();
        if(eOrder!=null){
            try {
                processInstance = workTaskService.startWorkflow(userId, "eordermanage", eOrder.getId().toString(), variables);
                eOrder.setProcessInstanceId(processInstance.getId());
+               eOrder.setOrderStatus(EOrderStatus.RECEIVED);
            } catch (Exception e) {
                e.printStackTrace();
            }
@@ -127,28 +155,29 @@ public class EOrderService implements IEOrderService {
     * @return
     */
 
-   public Page<EOrderDTO> findTodoTasks(String userId, Pageable pageable) 
+   public Page<EOrderManageDTO> findTodoTasks(String userId, Pageable pageable) 
    {
-       List<EOrderDTO> results = null;
+       List<EOrderManageDTO> results = null;
        List<WorkTaskDTO> workTaskLists = workTaskService.findTodoTasks(userId);
        // 根据流程的业务ID查询实体并关联
        if(null!=workTaskLists) {
-           results = new ArrayList<EOrderDTO>();
+           results = new ArrayList<EOrderManageDTO>();
            for (WorkTaskDTO workTask : workTaskLists) {
                Long businessKey = new Long(workTask.getBusinessKey());
+//               System.out.println(businessKey);
                if (workTask.getBusinessKey() == null) {
                    continue;
                }
                EOrder eOrder = eOrderRepository.findById(businessKey).get();
                if(eOrder!=null){
-                   EOrderDTO eOrderDTO = new EOrderDTO();
+                   EOrderManageDTO eOrderDTO = new EOrderManageDTO();
                    BeanUtils.copyProperties(eOrder, eOrderDTO);
                    BeanUtils.copyProperties(workTask, eOrderDTO);
                    results.add(eOrderDTO);
                }
            }
        }
-       return new PageImpl<EOrderDTO> (results, pageable, null!=results?results.size():0);
+       return new PageImpl<EOrderManageDTO> (results, pageable, null!=results?results.size():0);
    }
 
    /**
@@ -171,6 +200,11 @@ public class EOrderService implements IEOrderService {
    public void complete(String taskId, Map<String, Object> variables) {
        workTaskService.complete(taskId, variables);
    }
+
+    @Override
+    public Page<EOrder> getAll(Pageable pageable) {       
+        return eOrderRepository.findAll(pageable);
+    }
 
     
 

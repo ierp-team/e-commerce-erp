@@ -99,4 +99,9 @@ public class GoodsService implements IGoodsService {
 		}		
 	}
 
+    @Override
+    public List<Goods> findAll() {
+        return (List<Goods>) goodsRepository.findAll();
+    }
+
 }

@@ -15,9 +15,17 @@ public class TreeNode
     private String iconCls;   //节点图标样式
     private String rowCls;   //节点图标样式
     private String viewType;   //viewType
+    private String reference; //reference
     //private List<TreeNode> children = ArrayList<TreeNode>();  //子节点集合
     
     
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
     public String getViewType() {
         return viewType;
     }

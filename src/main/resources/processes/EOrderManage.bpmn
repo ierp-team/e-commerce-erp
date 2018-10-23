@@ -2,19 +2,23 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
   <process id="eordermanage" name="订单处理" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
-    <userTask id="matchorder" name="匹配订单">
+    <userTask id="matchorder" name="匹配订单" activiti:candidateGroups="salesperson,administrator,superAdministrator">
       <extensionElements>
         <activiti:taskListener event="complete" delegateExpression="${matchOrderListener}"></activiti:taskListener>
       </extensionElements>
     </userTask>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
-    <userTask id="distribution" name="配货">
+    <userTask id="distribution" name="配货" activiti:candidateGroups="warehouseStaff,administrator,superAdministrator">
       <extensionElements>
-        <activiti:taskListener event="complete" delegateExpression="${assignGoodListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${pickGoodListener}"></activiti:taskListener>
       </extensionElements>
     </userTask>
     <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
-    <userTask id="communication" name="沟通是否修改"></userTask>
+    <userTask id="communication" name="沟通是否修改" activiti:candidateGroups="salesperson,administrator,superAdministrator">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${decideModifyListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
     <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway">
       <extensionElements>
         <activiti:executionListener event="start" delegateExpression="${goodEnoughListener}"></activiti:executionListener>
@@ -31,35 +35,52 @@
     <sequenceFlow id="flow8" name="库存充足" sourceRef="exclusivegateway3" targetRef="distribution">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isEnough}]]></conditionExpression>
     </sequenceFlow>
-    <userTask id="purchaseorder" name="生成采购订单"></userTask>
-    <userTask id="outbound" name="产品订单出库">
+    <userTask id="purchaseorder" name="生成采购订单" activiti:candidateGroups="procurementStaff,administrator,superAdministrator">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${bulidPurchaseorderListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="outbound" name="出库，已发货" activiti:candidateGroups="warehouseStaff,administrator,superAdministrator">
       <extensionElements>
         <activiti:taskListener event="complete" delegateExpression="${outboundListener}"></activiti:taskListener>
       </extensionElements>
     </userTask>
-    <userTask id="delivery" name="发货"></userTask>
-    <userTask id="checkGood" name="收货/验货"></userTask>
+    <userTask id="received" name="收货" activiti:candidateGroups="warehouseStaff,administrator,superAdministrator">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${reveiveGoodListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="checkGood" name="收货/验货" activiti:candidateGroups="procurementStaff,administrator,superAdministrator">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${checkGoodListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
     <exclusiveGateway id="exclusivegateway6" name="Exclusive Gateway"></exclusiveGateway>
-    <userTask id="putinstorage" name="产品入库"></userTask>
+    <userTask id="putinstorage" name="产品入库" activiti:candidateGroups="warehouseStaff,administrator,superAdministrator">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${enterGoodListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
     <sequenceFlow id="flow13" sourceRef="putinstorage" targetRef="distribution"></sequenceFlow>
-    <userTask id="addproduct" name="添加产品"></userTask>
-    <userTask id="cancelorder" name="取消订单"></userTask>
-    <userTask id="returngood" name="退回货物给供应商"></userTask>
+    <userTask id="addproduct" name="添加产品" activiti:candidateGroups="warehouseStaff,administrator,superAdministrator">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${finishAddListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow14" sourceRef="distribution" targetRef="outbound"></sequenceFlow>
-    <sequenceFlow id="flow15" sourceRef="outbound" targetRef="delivery"></sequenceFlow>
-    <sequenceFlow id="flow16" sourceRef="delivery" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow15" sourceRef="outbound" targetRef="received"></sequenceFlow>
+    <sequenceFlow id="flow16" sourceRef="received" targetRef="endevent1"></sequenceFlow>
     <sequenceFlow id="flow17" sourceRef="purchaseorder" targetRef="checkGood"></sequenceFlow>
     <sequenceFlow id="flow18" sourceRef="checkGood" targetRef="exclusivegateway6"></sequenceFlow>
-    <sequenceFlow id="flow19" name="产品合格" sourceRef="exclusivegateway6" targetRef="putinstorage"></sequenceFlow>
-    <sequenceFlow id="flow20" name="产品不合格" sourceRef="exclusivegateway6" targetRef="returngood"></sequenceFlow>
-    <sequenceFlow id="flow21" sourceRef="returngood" targetRef="cancelorder"></sequenceFlow>
-    <sequenceFlow id="flow23" sourceRef="cancelorder" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow19" name="产品合格" sourceRef="exclusivegateway6" targetRef="putinstorage">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isQualified}]]></conditionExpression>
+    </sequenceFlow>
     <sequenceFlow id="flow24" name="是" sourceRef="exclusivegateway2" targetRef="addproduct">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isAdd}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow25" sourceRef="addproduct" targetRef="matchorder"></sequenceFlow>
-    <userTask id="consideraddproduct" name="决定是否添加产品"></userTask>
+    <userTask id="consideraddproduct" name="决定是否添加产品" activiti:candidateGroups="administrator,superAdministrator"></userTask>
     <sequenceFlow id="flow26" name="产品不存在" sourceRef="exclusivegateway1" targetRef="consideraddproduct">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isExist}]]></conditionExpression>
     </sequenceFlow>
@@ -68,11 +89,22 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isEnough}]]></conditionExpression>
     </sequenceFlow>
     <exclusiveGateway id="exclusivegateway8" name="Exclusive Gateway"></exclusiveGateway>
-    <userTask id="modifyorder" name="修改订单产品"></userTask>
+    <userTask id="modifyorder" name="修改订单产品" activiti:candidateGroups="salesperson,administrator,superAdministrator">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${afterModifyListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
     <sequenceFlow id="flow35" sourceRef="communication" targetRef="exclusivegateway8"></sequenceFlow>
-    <sequenceFlow id="flow36" sourceRef="exclusivegateway8" targetRef="cancelorder"></sequenceFlow>
-    <sequenceFlow id="flow37" sourceRef="exclusivegateway8" targetRef="modifyorder"></sequenceFlow>
+    <sequenceFlow id="flow37" name="客户同意修改" sourceRef="exclusivegateway8" targetRef="modifyorder">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${modify}]]></conditionExpression>
+    </sequenceFlow>
     <sequenceFlow id="flow38" sourceRef="modifyorder" targetRef="matchorder"></sequenceFlow>
+    <sequenceFlow id="flow39" name="产品不合格，退回产品，取消订单" sourceRef="exclusivegateway6" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isQualified}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow40" name="客户不同意修改，取消订单" sourceRef="exclusivegateway8" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!modify}]]></conditionExpression>
+    </sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_eordermanage">
     <bpmndi:BPMNPlane bpmnElement="eordermanage" id="BPMNPlane_eordermanage">
@@ -103,7 +135,7 @@
       <bpmndi:BPMNShape bpmnElement="outbound" id="BPMNShape_outbound">
         <omgdc:Bounds height="55.0" width="105.0" x="74.0" y="520.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="delivery" id="BPMNShape_delivery">
+      <bpmndi:BPMNShape bpmnElement="received" id="BPMNShape_received">
         <omgdc:Bounds height="55.0" width="105.0" x="74.0" y="610.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="checkGood" id="BPMNShape_checkGood">
@@ -118,14 +150,8 @@
       <bpmndi:BPMNShape bpmnElement="addproduct" id="BPMNShape_addproduct">
         <omgdc:Bounds height="55.0" width="105.0" x="318.0" y="124.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="cancelorder" id="BPMNShape_cancelorder">
-        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="342.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="returngood" id="BPMNShape_returngood">
-        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="610.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="353.0" y="790.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="505.0" y="790.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="consideraddproduct" id="BPMNShape_consideraddproduct">
         <omgdc:Bounds height="55.0" width="105.0" x="199.0" y="199.0"></omgdc:Bounds>
@@ -182,7 +208,7 @@
       <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
         <omgdi:waypoint x="126.0" y="665.0"></omgdi:waypoint>
         <omgdi:waypoint x="126.0" y="807.0"></omgdi:waypoint>
-        <omgdi:waypoint x="353.0" y="807.0"></omgdi:waypoint>
+        <omgdi:waypoint x="505.0" y="807.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
         <omgdi:waypoint x="369.0" y="475.0"></omgdi:waypoint>
@@ -198,24 +224,6 @@
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="14.0" width="48.0" x="374.0" y="679.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
-        <omgdi:waypoint x="389.0" y="637.0"></omgdi:waypoint>
-        <omgdi:waypoint x="470.0" y="637.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="60.0" x="391.0" y="617.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
-        <omgdi:waypoint x="522.0" y="610.0"></omgdi:waypoint>
-        <omgdi:waypoint x="522.0" y="397.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
-        <omgdi:waypoint x="575.0" y="369.0"></omgdi:waypoint>
-        <omgdi:waypoint x="612.0" y="369.0"></omgdi:waypoint>
-        <omgdi:waypoint x="612.0" y="807.0"></omgdi:waypoint>
-        <omgdi:waypoint x="501.0" y="807.0"></omgdi:waypoint>
-        <omgdi:waypoint x="388.0" y="807.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
         <omgdi:waypoint x="370.0" y="206.0"></omgdi:waypoint>
@@ -252,18 +260,32 @@
         <omgdi:waypoint x="423.0" y="294.0"></omgdi:waypoint>
         <omgdi:waypoint x="502.0" y="294.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow36" id="BPMNEdge_flow36">
-        <omgdi:waypoint x="522.0" y="314.0"></omgdi:waypoint>
-        <omgdi:waypoint x="522.0" y="342.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow37" id="BPMNEdge_flow37">
         <omgdi:waypoint x="522.0" y="274.0"></omgdi:waypoint>
         <omgdi:waypoint x="522.0" y="179.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="530.0" y="226.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow38" id="BPMNEdge_flow38">
         <omgdi:waypoint x="522.0" y="124.0"></omgdi:waypoint>
         <omgdi:waypoint x="521.0" y="97.0"></omgdi:waypoint>
         <omgdi:waypoint x="180.0" y="97.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow39" id="BPMNEdge_flow39">
+        <omgdi:waypoint x="389.0" y="637.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="637.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="790.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="397.0" y="590.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow40" id="BPMNEdge_flow40">
+        <omgdi:waypoint x="522.0" y="314.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="790.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="424.0" y="368.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
