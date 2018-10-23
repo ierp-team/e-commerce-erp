@@ -24,7 +24,7 @@ public class TreeNode
     
     private String reference;                 //reference
     
-    private String checked;                   //选择框
+    private boolean checked = false;                   //选择框
     
   
     public String getReference() {
@@ -43,11 +43,11 @@ public class TreeNode
     public String getRowCls() {
         return rowCls;
     }
-    public String getChecked() {
+    public boolean getChecked() {
         return checked;
     }
 
-    public void setChecked(String checked) {
+    public void setChecked(boolean checked) {
         this.checked = checked;
     }
 

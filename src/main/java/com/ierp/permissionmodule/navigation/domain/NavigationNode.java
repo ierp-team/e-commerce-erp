@@ -29,7 +29,7 @@ public class NavigationNode
     private boolean leaf;
     private String reference;
     private String nodeId;
-    private String checked;
+    private boolean checked;
     
     
 
@@ -84,7 +84,7 @@ public class NavigationNode
         return reference;
     }
     
-    public String getChecked() {
+    public boolean getChecked() {
         return checked;
     }
     
@@ -138,7 +138,7 @@ public class NavigationNode
         this.reference = reference;
     }
     
-    public void setChecked(String checked) {
+    public void setChecked(boolean checked) {
         this.checked = checked;
     }
     
