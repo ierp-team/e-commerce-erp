@@ -29,4 +29,6 @@ public interface IUserService {
 	public void deleteAll(String[] ids);
 	//上传图片
 	public String uploadImgFile(MultipartFile file, HttpServletRequest request);
+	//数据加密
+	public byte[] eccrypt(String info);
 }

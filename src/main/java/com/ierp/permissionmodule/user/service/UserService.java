@@ -1,6 +1,8 @@
 package com.ierp.permissionmodule.user.service;
 
 import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -218,6 +220,26 @@ public class UserService implements IUserService {
 			}
 		}
 		return new PageImpl<UserDTO>(dtoLists,pageable,userId.size());
+	}
+
+	@Override
+	public byte[] eccrypt(String info) {
+		// TODO Auto-generated method stub
+		//根据MD5算法生成MessageDigest对象
+			MessageDigest md5;
+			try {
+				md5 = MessageDigest.getInstance("MD5");
+				byte[] srcBytes = info.getBytes();
+				//使用srcBytes更新摘要
+				md5.update(srcBytes);
+				//完成哈希算法，得到result
+				byte[] resultBytes = md5.digest();
+				return resultBytes;
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
 	}
 
 	

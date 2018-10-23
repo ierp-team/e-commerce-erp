@@ -1,6 +1,7 @@
 package com.ierp.permissionmodule.user.controller;
 
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -130,6 +131,13 @@ public class UserController {
 		  		if(findDTO != null) {
 		  			return new ExtAjaxResponse(false,"该用户已存在，请更换用户名！");
 		  		}else {
+		  			if(dto.getPassword() != null) {
+		  				byte[] pwd = userService.eccrypt(dto.getPassword());//加密存储
+		  				if(pwd != null) {
+		  					String password = new String(pwd);
+		  					dto.setPassword(password);
+		  				}
+		  			}
 		  			userService.save(dto);
 //		  			System.out.println(userService.findOne(id));
 		          	return new ExtAjaxResponse(true,"保存成功！");

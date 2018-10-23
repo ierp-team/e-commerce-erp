@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ierp.permissionmodule.group.domain.Group;
 import com.ierp.permissionmodule.group.domain.GroupDTO;
 import com.ierp.permissionmodule.group.repository.GroupRepository;
+import com.ierp.permissionmodule.user.domain.User;
+import com.ierp.permissionmodule.user.domain.UserDTO;
 
 @Service
 @Transactional
@@ -110,6 +113,42 @@ public class GroupService implements IGroupService {
 	public Page<Group> findAll(Specification<Group> spec, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return groupRepository.findAll(spec,pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<GroupDTO> findAll(Pageable pageable) {
+		// TODO Auto-generated method stub
+		Page<Group> entityPage = groupRepository.findAll(pageable);
+		List<Group> entityLists = entityPage.getContent();
+		List<GroupDTO> dtoLists = null;
+		if(entityLists != null) {
+			dtoLists = new ArrayList<GroupDTO>();
+			for(Group entity : entityLists) {
+				GroupDTO dto = new GroupDTO();
+				GroupDTO.entityToDTO(entity, dto);
+				dtoLists.add(dto);
+			}
+		}
+		return new PageImpl<GroupDTO>(dtoLists,pageable,entityPage.getTotalElements());
+	}
+	
+
+	@Override
+	public void save(GroupDTO dto) {
+		// TODO Auto-generated method stub
+		Group entity = new Group();                                           
+		GroupDTO.dtoToEntity(dto, entity);                                   
+		if(dto.getText() != null) {                                         
+			for(int i=0; i<dto.getText().size();i++) {                      
+//				String groupId = dto.getRole().get(i);                      
+//				Optional<Group> group = groupRepository.findById(groupId);  
+//				if(group.isPresent()) {                                     
+//					entity.getGroup().add(group.get());                     
+//				}                                                           
+			}
+		}
+		groupRepository.save(entity);
 	}
 
 
