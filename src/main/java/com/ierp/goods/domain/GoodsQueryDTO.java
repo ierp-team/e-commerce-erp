@@ -1,7 +1,6 @@
 package com.ierp.goods.domain;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -21,6 +20,7 @@ public class GoodsQueryDTO {
 	private String goodsUuid;
 	private Long vendorId;
 	
+	
 	public String getGoodsCode() {
 		return goodsCode;
 	}
@@ -34,6 +34,7 @@ public class GoodsQueryDTO {
 		return vendorId;
 	}
 	
+	
 	public void setGoodsCode(String goodsCode) {
 		this.goodsCode = goodsCode;
 	}
@@ -46,6 +47,7 @@ public class GoodsQueryDTO {
 	public void setVendorId(Long vendorId) {
 		this.vendorId = vendorId;
 	}
+	
 	
 	@SuppressWarnings({ "serial"})
 	public static Specification<Goods> getWhereClause(final GoodsQueryDTO goodsQueryDTO) {

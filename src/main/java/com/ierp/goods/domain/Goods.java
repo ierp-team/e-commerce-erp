@@ -28,6 +28,7 @@ public class Goods {
 	private Float salePrice;		//出售价
 	private Integer goodsStock;		//库存
 	
+	
 	@Id
 	@Column(name="goods_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -70,6 +71,7 @@ public class Goods {
 	public Integer getGoodsStock() {
 		return goodsStock;
 	}
+	
 	
 	public void setId(Long id) {
 		this.id = id;
