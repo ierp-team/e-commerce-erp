@@ -1,5 +1,7 @@
 package com.ierp.vendormodule.product.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -53,7 +55,11 @@ public class ProductController {
 	{
 		return productService.findById(id).get();
 	}
-	
+	@RequestMapping("/getlist")
+    public List<Product> getlist() 
+    {
+        return productService.getList();
+    }
 	@DeleteMapping(value="{productId}")
 	public ExtAjaxResponse delete(@PathVariable("productId") Long id) 
 	{

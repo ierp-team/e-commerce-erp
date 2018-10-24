@@ -200,53 +200,53 @@ public class EOrderController {
     public @ResponseBody ExtAjaxResponse initData() 
     { 
         try {
-            Goods g1 = new Goods();
-            g1.setGoodsCode("qb0013");
-            g1.setGoodsName("铅笔13号");
-            g1.setGoodsDesc("13棒棒哒");
-            g1.setGoodsStock(130);
-            g1.setGoodsUuid("ppppp00013");
-            g1.setSupplyPrice((float)29.13);
-            g1.setSalePrice((float)135.2);
-            
-            Goods g2 = new Goods();
-            g2.setGoodsCode("qb0014");
-            g2.setGoodsName("铅笔14号");
-            g2.setGoodsDesc("14也是棒棒哒");
-            g2.setGoodsStock(140);
-            g2.setGoodsUuid("ppppp00014");
-            g2.setSupplyPrice((float)140.6);
-            g2.setSalePrice((float)214.8);
-            
-            EOrder eo1 = new EOrder();
-            eo1.setAddress("广州市松山湖大学路2号");
-            eo1.setContact("高先生学");
-            eo1.setCreateTime(new Date());
-            eo1.setLogisticsCompany(null);
-            eo1.setOrderNumber("tb000007");
-            eo1.setOrderStatus(EOrderStatus.ORIGINAL);
-            
-    
-            EOrderProduct eop1 = new EOrderProduct();
-            eop1.setGood(g1);
-            eop1.setQuantity(13);
-            eop1.setTotalPrice((float)1300);
-            eop1.seteOrder(eo1);
-            EOrderProduct eop2 = new EOrderProduct();
-            eop2.setGood(g2);
-            eop2.setQuantity(14);
-            eop2.setTotalPrice((float)1400);
-            eop2.seteOrder(eo1);
-            
-            goodsService.save(g1);
-            goodsService.save(g2);
-            eop1.setGood(g1);
-            eop2.setGood(g2);
-            eOrderProductService.save(eop1);
-            eOrderProductService.save(eop2);
-            eo1.getOrderProducts().add(eop1);
-            eo1.getOrderProducts().add(eop2);
-            eOrderService.save(eo1);
+//            Goods g1 = new Goods();
+//            g1.setGoodsCode("qb0013");
+//            g1.setGoodsName("铅笔13号");
+//            g1.setGoodsDesc("13棒棒哒");
+//            g1.setGoodsStock(130);
+//            g1.setGoodsUuid("ppppp00013");
+//            g1.setSupplyPrice((float)29.13);
+//            g1.setSalePrice((float)135.2);
+//            
+//            Goods g2 = new Goods();
+//            g2.setGoodsCode("qb0014");
+//            g2.setGoodsName("铅笔14号");
+//            g2.setGoodsDesc("14也是棒棒哒");
+//            g2.setGoodsStock(140);
+//            g2.setGoodsUuid("ppppp00014");
+//            g2.setSupplyPrice((float)140.6);
+//            g2.setSalePrice((float)214.8);
+//            
+//            EOrder eo1 = new EOrder();
+//            eo1.setAddress("广州市松山湖大学路2号");
+//            eo1.setContact("高先生学");
+//            eo1.setCreateTime(new Date());
+//            eo1.setLogisticsCompany(null);
+//            eo1.setOrderNumber("tb000007");
+//            eo1.setOrderStatus(EOrderStatus.ORIGINAL);
+//            
+//    
+//            EOrderProduct eop1 = new EOrderProduct();
+//            eop1.setGood(g1);
+//            eop1.setQuantity(13);
+//            eop1.setTotalPrice((float)1300);
+//            eop1.seteOrder(eo1);
+//            EOrderProduct eop2 = new EOrderProduct();
+//            eop2.setGood(g2);
+//            eop2.setQuantity(14);
+//            eop2.setTotalPrice((float)1400);
+//            eop2.seteOrder(eo1);
+//            
+//            goodsService.save(g1);
+//            goodsService.save(g2);
+//            eop1.setGood(g1);
+//            eop2.setGood(g2);
+//            eOrderProductService.save(eop1);
+//            eOrderProductService.save(eop2);
+//            eo1.getOrderProducts().add(eop1);
+//            eo1.getOrderProducts().add(eop2);
+//            eOrderService.save(eo1);
             
             
          

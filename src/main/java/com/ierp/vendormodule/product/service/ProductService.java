@@ -92,6 +92,11 @@ public class ProductService implements IProductService{
 		return new PageImpl<ProductDisplayDTO>(dtoLists, pageable, entityPage.getTotalElements());	
 	}
 
+    @Override
+    public List<Product> getList() {
+        return (List<Product>) productRepository.findAll();
+    }
+
 //	@Override
 //	public Vendor findByVendorAccount(String vendorAccount) {
 //		return productRepository.findByVendorAccount(vendorAccount);

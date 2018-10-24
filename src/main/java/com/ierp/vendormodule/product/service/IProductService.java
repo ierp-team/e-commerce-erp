@@ -1,5 +1,6 @@
 package com.ierp.vendormodule.product.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,5 +19,6 @@ public interface IProductService {
 	public void deleteById(Long id);
 	public void deleteAll(Long[] ids);
 	public Page<ProductDisplayDTO> findAll(Specification<Product> spec, Pageable pageable);
+	public List<Product> getList();
 //	public Vendor findByVendorAccount(String vendorAccount);
 }

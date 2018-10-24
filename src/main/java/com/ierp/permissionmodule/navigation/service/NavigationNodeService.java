@@ -106,6 +106,7 @@ public class NavigationNodeService implements INavigationNodeService {
             node.setRowCls(tn.getRowCls());
             node.setViewType(tn.getViewType());
             node.setReference(tn.getReference());
+            node.setChecked(tn.getChecked());
 
             
             if(tn.getChildNodes()!=null) {

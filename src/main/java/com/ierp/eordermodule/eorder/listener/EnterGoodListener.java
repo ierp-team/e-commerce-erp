@@ -32,6 +32,8 @@ public class EnterGoodListener implements Serializable, TaskListener{
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         EOrder eOrder = eOrderService.findOneById(new Long(processInstance.getBusinessKey()));  
         
+        String stockOrderNumber = (String) delegateTask.getVariable("stockOrderNumber");
+        
         eOrder.setOrderStatus(EOrderStatus.ASSIGNED);
         eOrder.setEnterTime(new Date());
     }

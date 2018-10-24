@@ -1,5 +1,7 @@
 package com.ierp.goods.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +96,12 @@ public class GoodsController {
 	public Goods getOne(@PathVariable("id") Long id) {
 		return goodsService.findById(id).get();
 	}
+	
+	@RequestMapping(value="/getlist")
+    public List<Goods> getList() {
+        return goodsService.findAll();
+    }
+    
 	
 	@GetMapping
 	public Page<GoodsDTO> getPage(GoodsQueryDTO goodsQueryDTO , ExtjsPageRequest pageRequest) {
