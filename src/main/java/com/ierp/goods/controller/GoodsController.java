@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ierp.goods.domain.GoodsQueryDTO;
-import com.ierp.common.beans.BeanUtils;
 import com.ierp.common.beans.PhotoUploadUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
 import com.ierp.goods.domain.Goods;
+import com.ierp.goods.domain.GoodsDTO;
 import com.ierp.goods.service.GoodsService;
 
 @RestController
@@ -32,14 +32,14 @@ public class GoodsController {
 	GoodsService goodsService;
 	
 	@PostMapping
-	public ExtAjaxResponse save(Goods goods, MultipartFile photoFile, HttpServletRequest request) {
+	public ExtAjaxResponse save(GoodsDTO dto, MultipartFile photoFile, HttpServletRequest request) {
 		try {
 			String goodsPhoto = null;
 			if (photoFile!=null) {
 				goodsPhoto = PhotoUploadUtils.UpAndgetPath(photoFile, request);
 			}
-			goods.setGoodsPhoto(goodsPhoto);
-			goodsService.save(goods);
+			dto.setGoodsPhoto(goodsPhoto);
+			goodsService.save(dto);
 			return new ExtAjaxResponse(true,"保存成功！");
 		} catch(Exception e) {
 			return new ExtAjaxResponse(true,"保存失败！");
@@ -47,12 +47,12 @@ public class GoodsController {
 	}
 	
 	@PutMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody Goods dto) {
+	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody GoodsDTO dto) {
 		try {
 			Goods entity = goodsService.findById(id).get();
 			if(entity!=null) {
-				BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
-				goodsService.save(entity);
+				//BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
+				goodsService.update(dto);
 				return new ExtAjaxResponse(true,"保存成功！");
 			} else {
 				return new ExtAjaxResponse(true,"保存失败！");
@@ -96,7 +96,7 @@ public class GoodsController {
 	}
 	
 	@GetMapping
-	public Page<Goods> getPage(GoodsQueryDTO goodsQueryDTO , ExtjsPageRequest pageRequest) {
+	public Page<GoodsDTO> getPage(GoodsQueryDTO goodsQueryDTO , ExtjsPageRequest pageRequest) {
 		return goodsService.findAll(GoodsQueryDTO.getWhereClause(goodsQueryDTO), pageRequest.getPageable());
 	}
 	

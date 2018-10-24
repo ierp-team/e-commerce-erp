@@ -1,24 +1,9 @@
 package com.ierp.goods.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import com.ierp.common.beans.BeanUtils;
 
-import com.ierp.vendormodule.vendor.domain.Vendor;
+public class GoodsDTO {
 
-/**
- * 公司商品类
- *
- */
-@Entity
-@Table(name="t_goods")
-public class Goods {
-	
 	private Long id;			//商品id
 	private String goodsCode;		//商品编号
 	private String goodsName;		//商品名字
@@ -26,30 +11,41 @@ public class Goods {
 	private String goodsUuid;		//商品标识码
 	private String goodsDesc;		//商品描述
 	private String goodsSpec;		//商品规格
-	private Vendor vendor;			//供应商
+	private Long vendorId;		//供应商id
+	private String vendorName;		//供应商名
 	private Float supplyPrice;		//进货价
 	private Float salePrice;		//出售价
 	private Integer goodsStock;		//库存
 	
 	
-	@Id
-	@Column(name="goods_id")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	/* -------------------------entityToDto------------------------------- */
+	public static void entityToDto(Goods entity, GoodsDTO dto) {
+		if (null!=entity.getVendor()) {
+			dto.setVendorId(entity.getVendor().getVendorId());
+			dto.setVendorName(entity.getVendor().getVendorName());
+		}
+		BeanUtils.copyProperties(entity, dto);
+	}
+	/* ------------------------------------------------------------------- */
+	
+	/* -------------------------entityToDto------------------------------- */
+	public static void dtoToEntity(GoodsDTO dto, Goods entity) {
+		BeanUtils.copyProperties(dto, entity);
+	}
+	/* ------------------------------------------------------------------- */
+	
 	public Long getId() {
 		return id;
 	}
-	@NotNull
 	public String getGoodsCode() {
 		return goodsCode;
 	}
-	@NotNull
 	public String getGoodsName() {
 		return goodsName;
 	}
 	public String getGoodsPhoto() {
 		return goodsPhoto;
 	}
-	@NotNull
 	public String getGoodsUuid() {
 		return goodsUuid;
 	}
@@ -59,19 +55,18 @@ public class Goods {
 	public String getGoodsSpec() {
 		return goodsSpec;
 	}
-	@ManyToOne
-	public Vendor getVendor() {
-		return vendor;
+	public Long getVendorId() {
+		return vendorId;
 	}
-	@NotNull
+	public String getVendorName() {
+		return vendorName;
+	}
 	public Float getSupplyPrice() {
 		return supplyPrice;
 	}
-	@NotNull
 	public Float getSalePrice() {
 		return salePrice;
 	}
-	@NotNull
 	public Integer getGoodsStock() {
 		return goodsStock;
 	}
@@ -98,8 +93,11 @@ public class Goods {
 	public void setGoodsSpec(String goodsSpec) {
 		this.goodsSpec = goodsSpec;
 	}
-	public void setVendor(Vendor vendor) {
-		this.vendor = vendor;
+	public void setVendorId(Long vendorId) {
+		this.vendorId = vendorId;
+	}
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
 	}
 	public void setSupplyPrice(Float supplyPrice) {
 		this.supplyPrice = supplyPrice;
@@ -109,14 +107,6 @@ public class Goods {
 	}
 	public void setGoodsStock(Integer goodsStock) {
 		this.goodsStock = goodsStock;
-	}
-	
-	@Override
-	public String toString() {
-		return "Goods [id=" + id + ", goodsCode=" + goodsCode + ", goodsName=" + goodsName
-				+ ", goodsPhoto=" + goodsPhoto + ", goodsUuid=" + goodsUuid + ", goodsDesc=" + goodsDesc
-				+ ", goodsSpec=" + goodsSpec + ", vendor=" + vendor + ", supplyPrice=" + supplyPrice
-				+ ", salePrice=" + salePrice + ", goodsStock=" + goodsStock + "]";
 	}
 	
 }

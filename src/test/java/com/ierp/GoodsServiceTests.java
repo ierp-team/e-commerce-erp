@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ierp.goods.domain.Goods;
+import com.ierp.goods.domain.GoodsDTO;
 import com.ierp.goods.service.IGoodsService;
 
 @RunWith(SpringRunner.class)
@@ -25,14 +26,14 @@ public class GoodsServiceTests {
 	@Test
 	public void testSave() {
 		for(int i=0; i<100; i++) {
-			Goods goods = new Goods();
+			GoodsDTO goods = new GoodsDTO();
 			goods.setGoodsCode("0000"+i);
 			goods.setGoodsName("牛奶"+i);
 			goods.setGoodsPhoto("1.png");
 			goods.setGoodsUuid("1234"+i);
 			goods.setGoodsDesc("蓝瓶的好喝的");
 			goods.setGoodsSpec("350ml");
-			goods.setVendorId(1000l);
+			//goods.setVendorId(1000l);
 			goods.setSupplyPrice(5f);
 			goods.setSalePrice(10f);
 			goods.setGoodsStock(50);

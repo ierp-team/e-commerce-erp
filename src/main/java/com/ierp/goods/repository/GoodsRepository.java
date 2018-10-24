@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.ierp.goods.domain.Goods;
+import com.ierp.vendormodule.vendor.domain.Vendor;
 
 
 /**
@@ -26,6 +27,9 @@ public interface GoodsRepository extends PagingAndSortingRepository<Goods, Long>
 
 	@Query(value="SELECT sum(goods_stock) FROM t_goods WHERE goods_uuid=?1", nativeQuery=true)
     int sumGoodsStock(String uuid);
+	
+	@Query
+    Goods findByGoodsUuidAndVendor(String goodsUuid, Vendor vendor);
 
 	@Query
 	List<Goods> findByGoodsUuid(String uuid);
