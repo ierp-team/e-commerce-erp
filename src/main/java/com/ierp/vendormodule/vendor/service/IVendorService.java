@@ -1,5 +1,6 @@
 package com.ierp.vendormodule.vendor.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -17,5 +18,6 @@ public interface IVendorService {
 	public void deleteById(Long id);
 	public void deleteAll(Long[] ids);
 	public Vendor findByVendorName(String vendorName);
+	public List<Vendor> getlist();
 	public Page<Vendor> findAll(Specification<Vendor> spec, Pageable pageable);
 }

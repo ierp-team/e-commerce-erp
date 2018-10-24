@@ -1,5 +1,7 @@
 package com.ierp.vendormodule.vendor.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -40,6 +42,11 @@ public class VendorController {
 	@GetMapping
 	public Page<Vendor> getPage(VendorQueryDTO vendorQueryDTO , ExtjsPageRequest pageRequest){
 		return vendorService.findAll(VendorQueryDTO.getWhereClause(vendorQueryDTO), pageRequest.getPageable());
+	}
+	
+	@RequestMapping(value="/getlist")
+	public List<Vendor> getlist(){
+		return vendorService.getlist();
 	}
 	
 	@GetMapping(value="{vendorId}")

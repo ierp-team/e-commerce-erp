@@ -1,5 +1,7 @@
 package com.ierp.vendormodule.vendor.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -12,4 +14,7 @@ public interface VendorRepository extends PagingAndSortingRepository<Vendor, Lon
 ,JpaSpecificationExecutor<Vendor>{
 	@Query
 	Vendor findByVendorName(String vendorName);
+	
+	@Query
+	List<Vendor> getlist();
 }
