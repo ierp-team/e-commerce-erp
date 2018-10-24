@@ -9,10 +9,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ierp.permissionmodule.user.domain.User;
 import com.ierp.vendormodule.product.domain.Product;
 
 @Entity
@@ -22,9 +25,8 @@ public class Vendor {
 	private	String vendorName;
 	private String vendorAddress;
 	private String vendorPhone;
-	private String vendorAccount;
-	private String vendorPassword;
 	private String vendorFund;
+	private User user;
 	private List<Product> product = new ArrayList<Product>();
 	
 	@Id
@@ -45,17 +47,16 @@ public class Vendor {
 		return vendorPhone;
 	}
 
-	public String getVendorAccount() {
-		return vendorAccount;
-	}
-
-	public String getVendorPassword() {
-		return vendorPassword;
-	}
-
 	public String getVendorFund() {
 		return vendorFund;
 	}
+	
+	@OneToOne
+	@JoinColumn(name="id")
+	public User getUser() {
+		return user;
+	}
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL)
 	public List<Product> getProduct() {
@@ -78,16 +79,12 @@ public class Vendor {
 		this.vendorPhone = vendorPhone;
 	}
 
-	public void setVendorAccount(String vendorAccount) {
-		this.vendorAccount = vendorAccount;
-	}
-
-	public void setVendorPassword(String vendorPassword) {
-		this.vendorPassword = vendorPassword;
-	}
-
 	public void setVendorFund(String vendorFund) {
 		this.vendorFund = vendorFund;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void setProduct(List<Product> product) {

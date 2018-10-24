@@ -16,14 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ierp.common.beans.BeanUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
+import com.ierp.permissionmodule.group.domain.Group;
+import com.ierp.permissionmodule.group.service.IGroupService;
+import com.ierp.permissionmodule.user.domain.User;
+import com.ierp.permissionmodule.user.service.IUserService;
 import com.ierp.vendormodule.vendor.domain.Vendor;
+import com.ierp.vendormodule.vendor.domain.VendorDTO;
 import com.ierp.vendormodule.vendor.domain.VendorQueryDTO;
 import com.ierp.vendormodule.vendor.service.IVendorService;
 
 @RestController
 @RequestMapping("/vendor")
 public class VendorController {
-
+	@Autowired
+	private IUserService userService;
+	
+	@Autowired
+	private IGroupService groupService;
+	
 	@Autowired
 	private IVendorService vendorService;
 	
@@ -80,11 +90,20 @@ public class VendorController {
 	}
 	
 	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse save(@RequestBody Vendor vendor) 
+	public ExtAjaxResponse save(@RequestBody VendorDTO vendordto) 
 	{
 		try {
-			if(vendorService.findByVendorName(vendor.getVendorName())==null) {
-				vendorService.save(vendor);
+			if(vendorService.findByVendorName(vendordto.getVendorName())==null) {
+				User user = new User();
+				user.setId(vendordto.getVendorAccount());
+				user.setPassword(vendordto.getVendorPassword());
+				Group group = groupService.findById("suplier").get();
+				user.getGroup().add(group);
+				userService.save(user);
+				Vendor entity = new Vendor();
+				vendordto.dtoToEntity(vendordto, entity);
+				entity.setUser(user);
+				vendorService.save(entity);
 				return new ExtAjaxResponse(true,"保存成功！");
 			}else
 				return new ExtAjaxResponse(true,"保存失败！");
