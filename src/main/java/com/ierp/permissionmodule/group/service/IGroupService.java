@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.ierp.permissionmodule.group.domain.Group;
 import com.ierp.permissionmodule.group.domain.GroupDTO;
-import com.ierp.permissionmodule.user.domain.UserDTO;
 
 public interface IGroupService {
 	public Group save(Group entity);
@@ -31,7 +30,7 @@ public interface IGroupService {
 	public void delete(List<Group> entities);
 	
 	public Page<GroupDTO> findAll(Pageable pageable);
-	public Page<Group> findAll(Specification<Group> spec, Pageable pageable);
+	public Page<GroupDTO> findAll(Specification<Group> spec, Pageable pageable);
 	
 	
 }

@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class GroupQueryDTO {
 	private String groupName;
-	private String type;
+//	private String type;
 	
 	public String getGroupName() {
 		return groupName;
@@ -21,12 +21,12 @@ public class GroupQueryDTO {
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
+//	public String getType() {
+//		return type;
+//	}
+//	public void setType(String type) {
+//		this.type = type;
+//	}
 	
 	@SuppressWarnings({"serial"})
 	public static Specification<Group> getWhereClause(final GroupQueryDTO groupQueryDTO){
@@ -37,11 +37,11 @@ public class GroupQueryDTO {
 				// TODO Auto-generated method stub
 				List<Predicate> predicate = new ArrayList<>();
 				if(StringUtils.isNotBlank(groupQueryDTO.getGroupName())) {
-					predicate.add(criteriaBuilder.like(root.get("groupName").as(String.class), "%"+groupQueryDTO.getGroupName()+"%"));
+					predicate.add(criteriaBuilder.like(root.get("name").as(String.class), "%"+groupQueryDTO.getGroupName()+"%"));
 				}
-				if(StringUtils.isNotBlank(groupQueryDTO.getType())) {
-					predicate.add(criteriaBuilder.like(root.get("type").as(String.class), "%"+groupQueryDTO.getGroupName()+"%"));
-				}
+//				if(StringUtils.isNotBlank(groupQueryDTO.getType())) {
+//					predicate.add(criteriaBuilder.like(root.get("type").as(String.class), "%"+groupQueryDTO.getType()+"%"));
+//				}
 				Predicate[] pre = new Predicate[predicate.size()];
 				return query.where(predicate.toArray(pre)).getRestriction();
 			}

@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ierp.permissionmodule.group.domain.Group;
 import com.ierp.permissionmodule.group.domain.GroupDTO;
 import com.ierp.permissionmodule.group.repository.GroupRepository;
-import com.ierp.permissionmodule.user.domain.User;
-import com.ierp.permissionmodule.user.domain.UserDTO;
 
 @Service
 @Transactional
@@ -92,7 +90,7 @@ public class GroupService implements IGroupService {
 		List<String> idsLists = new ArrayList<String>(Arrays.asList(ids));
 		List<Group> groups = (List<Group>)groupRepository.findAllById(idsLists);
 		if(groups != null) {
-			groupRepository.deleteAll(groups);//改：应该是逻辑删除，不是物理删除
+			groupRepository.deleteAll(groups);
 		}
 	}
 
@@ -110,9 +108,21 @@ public class GroupService implements IGroupService {
 
 	@Override
 	@Transactional(readOnly=true)
-	public Page<Group> findAll(Specification<Group> spec, Pageable pageable) {
+	public Page<GroupDTO> findAll(Specification<Group> spec, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return groupRepository.findAll(spec,pageable);
+		Page<Group> entityPage = null;
+		entityPage = groupRepository.findAll(spec,pageable);
+		List<Group> entityLists = entityPage.getContent();
+		List<GroupDTO> dtoLists = null;
+		if(entityLists != null) {
+			dtoLists = new ArrayList<GroupDTO>();
+			for(Group entity : entityLists) {
+				GroupDTO dto = new GroupDTO();
+				GroupDTO.entityToDTO(entity, dto);
+				dtoLists.add(dto);
+			}
+		}
+		return new PageImpl<GroupDTO>(dtoLists,pageable,entityPage.getTotalElements());
 	}
 
 	@Override

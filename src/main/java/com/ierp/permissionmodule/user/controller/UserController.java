@@ -1,11 +1,14 @@
 package com.ierp.permissionmodule.user.controller;
 
 
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ierp.common.beans.BeanUtils;
 import com.ierp.common.web.ExtAjaxResponse;
 import com.ierp.common.web.ExtjsPageRequest;
+import com.ierp.common.web.SessionUtil;
 import com.ierp.permissionmodule.group.domain.Group;
 import com.ierp.permissionmodule.user.domain.User;
 import com.ierp.permissionmodule.user.domain.UserDTO;
@@ -44,27 +48,27 @@ public class UserController {
 	/*
 	 * http://localhost:8080/user/findAll
 	 * @查询全部员工
+	 * @GetMapping("/findAll")
+	 * public List<UserDTO> findAllUser(){
+	 * 	try {
+	 * 		List<UserDTO> dto = new ArrayList<UserDTO>();
+	 * 		dto = userService.findAll();
+	 * 		return dto;
+	 * 	}catch (Exception e) {
+	 * 		e.printStackTrace();
+	 * 		return null;
+	 * 	}
+	 * }
 	 */
-//    @GetMapping("/findAll")
-//    public List<UserDTO> findAllUser(){
-//    	try {
-//    		List<UserDTO> dto = new ArrayList<UserDTO>();
-//    		dto = userService.findAll();
-//    		return dto;
-//    	}catch (Exception e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//    }
-    
+
     /*
      * http://localhost:8080/user?page=1&limit=20
      * @查询所有员工并分页
+     * @RequestMapping
+     * public Page<UserDTO> getUserPage(ExtjsPageRequest pageable) {
+     * 	return userService.findAll(pageable.getPageable());
+     * }
      */
-//    @RequestMapping
-//    public Page<UserDTO> getUserPage(ExtjsPageRequest pageable) {
-//		return userService.findAll(pageable.getPageable());
-//    }
     @RequestMapping
     public Page<UserDTO> getPage(UserQueryDTO dto,ExtjsPageRequest pageable){
 //    	System.out.println("getRole():"+dto.getGroupName());
@@ -93,6 +97,37 @@ public class UserController {
 			return userService.findByGroup(dto.getGroupName(), pageable.getPageable());
 		}
 		return userService.findAll(UserQueryDTO.getWhereClause(dto), pageable.getPageable());
+    	
+    }
+
+    /*
+     * http://localhost:8080/user/personalCenter
+     * @查看用户个人信息
+     */
+    @RequestMapping("/personalCenter")
+    public ExtAjaxResponse personalCenter(ExtjsPageRequest pageable, HttpSession session) {
+    	try {
+    		String userId = SessionUtil.getUserName(session);
+        	Map<String,String> map = new IdentityHashMap<String, String>();
+        	if(userId != null) {
+        		UserDTO dto = userService.findOne(userId); 	
+            	map.put("id", dto.getId());
+            	map.put("password", dto.getPassword());
+            	map.put("profile_pic", dto.getProfile_pic());
+            	map.put("userName", dto.getUserName());
+            	map.put("user_num", dto.getUser_num());
+            	map.put("phone", dto.getPhone());
+            	map.put("sex", dto.getSex());
+            	map.put("birthday", String.valueOf(dto.getBirthday()));
+            	map.put("address", dto.getAddress());
+            	map.put("status", dto.getStatus());
+            	map.put("role", String.valueOf(dto.getRole()));
+        	}
+        	return new ExtAjaxResponse(true,map);
+    	}catch (Exception e) {
+			 e.printStackTrace();
+			 return new ExtAjaxResponse(false,"失败！");
+		}
     	
     }
     
@@ -221,6 +256,67 @@ public class UserController {
     	
     }
 
+    /*
+     * @修改个人密码
+     */
+    @PutMapping("/passwordUpdate")
+    public ExtAjaxResponse personalUpdate(HttpSession session,String password) {
+    	try {
+    		String userId = SessionUtil.getUserName(session);
+    		if(userId != null) {
+    			UserDTO findDTO = userService.findOne(userId);
+    			if(findDTO != null) {
+    				findDTO.setPassword(password);
+    				userService.save(findDTO);
+    			}
+    		}
+    		return new ExtAjaxResponse(true,"修改成功！");
+    	}catch (Exception e) {
+			 e.printStackTrace();
+			 return new ExtAjaxResponse(false,"失败！");
+		}
+    }
+    
+    /*
+     * @修改个人信息
+     */
+    @PutMapping("/personalEdit")
+    public ExtAjaxResponse peronalEdit(HttpSession session,@RequestParam("image")MultipartFile profile_pic,HttpServletRequest request,UserDTO dto) {
+    	try {
+    		String userId = SessionUtil.getUserName(session);
+    		if(userId != null) {
+    			UserDTO findDTO = userService.findOne(userId);
+    			if(findDTO != null) {
+    				String img = userService.uploadImgFile(profile_pic, request);
+    				String path = "/resources/images/user-profile/";
+    				if(img == "图片大小不能超过5M！") {
+    		  			return new ExtAjaxResponse(false,"图片大小不能超过5M！");
+    		  		}else if(img == "格式错误！只支持jgp或png文件！") {
+    		  			return new ExtAjaxResponse(false,"格式错误！只支持jgp或png文件！");
+    		  		}else if(img == "上传失败！"){
+    		  			return new ExtAjaxResponse(false,"上传失败！");
+    		  		}else {
+    		  			if(img == "未选择文件！") {
+    		  				if(findDTO.getProfile_pic() != null) {
+    		  					img = findDTO.getProfile_pic();
+    		  				}else {
+    		  					img = "f15.png";
+    		  				}	
+    			  		}
+    		  			img = path+img;
+    		  			dto.setProfile_pic(img);
+    		  			BeanUtils.copyProperties(dto, findDTO);
+    		  			userService.save(findDTO);
+    		  		}
+    			}
+    		}
+    		return new ExtAjaxResponse(false,"修改成功！");
+    	}catch (Exception e) {
+			 e.printStackTrace();
+			 return new ExtAjaxResponse(false,"修改失败！");
+		}
+    }
+    
     /*
      * http://localhost:8080/user/id
      * @删除离职员工（即把员工状态改成离职）

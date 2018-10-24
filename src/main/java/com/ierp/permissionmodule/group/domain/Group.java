@@ -13,10 +13,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import com.ierp.permissionmodule.navigation.domain.NavigationNode;
 @Entity
 @Table(name="act_id_group")
+@SQLDelete(sql = "update act_id_group set REV_ = '1' where ID_ = ?")
+@Where(clause = "REV_  != '1' or REV_ = null")
 public class Group {
     private String groupName;
     private String rev;
