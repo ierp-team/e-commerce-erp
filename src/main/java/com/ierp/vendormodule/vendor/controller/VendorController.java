@@ -45,8 +45,8 @@ public class VendorController {
 	}
 	
 	@RequestMapping(value="/getlist")
-	public List<Vendor> getlist(){
-		return vendorService.getlist();
+	public List<Vendor> getList(){
+		return vendorService.getList();
 	}
 	
 	@GetMapping(value="{vendorId}")

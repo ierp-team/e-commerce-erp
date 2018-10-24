@@ -18,6 +18,6 @@ public interface IVendorService {
 	public void deleteById(Long id);
 	public void deleteAll(Long[] ids);
 	public Vendor findByVendorName(String vendorName);
-	public List<Vendor> getlist();
+	public List<Vendor> getList();
 	public Page<Vendor> findAll(Specification<Vendor> spec, Pageable pageable);
 }

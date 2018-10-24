@@ -2,6 +2,7 @@ package com.ierp.vendormodule.vendor.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class VendorService implements IVendorService{
 	public long count() {
 		return vendorRepository.count();
 	}
-
+	
 	@Override
 	public void deleteById(Long id) {
 		vendorRepository.deleteById(id);
@@ -66,9 +67,14 @@ public class VendorService implements IVendorService{
 	public Vendor findByVendorName(String vendorName) {
 		return vendorRepository.findByVendorName(vendorName);
 	}
-
+	
 	@Override
-	public List<Vendor> getlist() {
-		return vendorRepository.getlist();
+	public List<Vendor> getList() {
+		Iterator<Vendor> iter = vendorRepository.findAll().iterator();
+		List<Vendor> list = new ArrayList<Vendor>();
+		while (iter.hasNext()) {
+			list.add(iter.next());
+		}
+		return list;
 	}
 }

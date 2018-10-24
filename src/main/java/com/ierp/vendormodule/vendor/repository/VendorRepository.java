@@ -15,6 +15,4 @@ public interface VendorRepository extends PagingAndSortingRepository<Vendor, Lon
 	@Query
 	Vendor findByVendorName(String vendorName);
 	
-	@Query
-	List<Vendor> getlist();
 }
