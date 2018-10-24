@@ -25,6 +25,7 @@ import com.ierp.common.web.ExtjsPageRequest;
 import com.ierp.goods.domain.Goods;
 import com.ierp.goods.domain.GoodsDTO;
 import com.ierp.goods.service.GoodsService;
+import com.ierp.vendormodule.product.domain.ProductDisplayDTO;
 
 @RestController
 @RequestMapping("/goods")
@@ -42,6 +43,27 @@ public class GoodsController {
 			}
 			dto.setGoodsPhoto(goodsPhoto);
 			goodsService.save(dto);
+			return new ExtAjaxResponse(true,"保存成功！");
+		} catch(Exception e) {
+			return new ExtAjaxResponse(true,"保存失败！");
+		}
+	}
+	
+	//从供应商产品表里添加产品到公司商品表
+	@PostMapping(value="/fromproduct")
+	public ExtAjaxResponse saveFromProduct(ProductDisplayDTO dto) {
+		try {
+			GoodsDTO goodsDto = new GoodsDTO();
+			goodsDto.setGoodsName(dto.getProductName());
+			goodsDto.setGoodsPhoto(dto.getProductPic());
+			goodsDto.setGoodsUuid(dto.getProductUuid());
+			goodsDto.setGoodsDesc(dto.getProductDesc());
+			goodsDto.setGoodsSpec(dto.getProductSpec());
+			goodsDto.setVendorId(dto.getVendorId());
+			goodsDto.setSupplyPrice(dto.getProductPrice());
+			goodsDto.setSalePrice(dto.getProductPrice()*2);
+			goodsDto.setGoodsStock(0);
+			goodsService.save(goodsDto);
 			return new ExtAjaxResponse(true,"保存成功！");
 		} catch(Exception e) {
 			return new ExtAjaxResponse(true,"保存失败！");

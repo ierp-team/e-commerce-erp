@@ -33,7 +33,7 @@ public class GoodsServiceTests {
 			goods.setGoodsUuid("1234"+i);
 			goods.setGoodsDesc("蓝瓶的好喝的");
 			goods.setGoodsSpec("350ml");
-			//goods.setVendorId(1000l);
+			goods.setVendorId(1l);
 			goods.setSupplyPrice(5f);
 			goods.setSalePrice(10f);
 			goods.setGoodsStock(50);
