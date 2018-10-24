@@ -36,49 +36,38 @@ public class CreateOrderController {
 	@ResponseBody
 	@Transactional
 	public void saveDetail(@RequestBody String jString) {
-		
-		StockOrder stockOrder = new StockOrder();
-		StockProduct stockProduct = new StockProduct();
-		Float stockOrderSum = (float) 0;
-		
-		
 		System.out.println(jString);
+		StockOrder stockOrder = new StockOrder();
+		
+		stockOrder.setStockOrderSum((float) 0);
+		Float stockOrderSum = stockOrder.getStockOrderSum();
+
 		JSONObject root = new JSONObject().parseObject(jString);
+		
+		String stockOrderNumber = root.getString("stockOrderNumber");
+		System.out.println(stockOrderNumber);
+		stockOrder.setStockOrderNumber(stockOrderNumber);
+		stockOrder.setUserName(root.getString("userName"));
+		stockOrder.setPhoneNumber(root.getString("phoneNumber"));
+		stockOrder.setStockOrderStatus(StockOrderStatus.ORIGINAL);
+		stockOrder.setAddress(root.getString("address"));
+		stockOrder.setCreateTime(new Date());
+		
 		
 		//保存详单
 		JSONArray list = root.getJSONArray("list");
-		if(list!=null) {
-			for (int i = 0; i < list.size(); i++) {
-				JSONObject detailBean = (JSONObject) list.get(i);
-				stockProduct.setProduct((productService.findById(detailBean.getLong("productId"))).get());
-//				String stockOrderNumber = root.getString("stockOrderNumber");
-//				System.out.println(stockOrderNumber);
-				stockProduct.setStockOrder(stockOrder);
-				stockProduct.setStockProductQuan(detailBean.getInteger("stockProductQuan"));
-				stockProduct.setStockProductAmmount(detailBean.getFloat("stockProductAmmount"));
-				stockOrderSum += detailBean.getFloat("stockProductAmmount");
-				try {
-					stockProductService.save(stockProduct);
-					System.out.println("success");
-				} catch (Exception e) {
-					System.out.println("false");
-				}
-			}
+		for (int i = 0; i < list.size(); i++) {
+			StockProduct stockProduct = new StockProduct();
+			JSONObject detailBean = (JSONObject) list.get(i);
+			stockProduct.setProduct((productService.findById(detailBean.getLong("productId"))).get());
+			stockProduct.setStockProductQuan(detailBean.getInteger("stockProductQuan"));
+			stockProduct.setStockProductAmmount(detailBean.getFloat("stockProductAmmount"));
+			stockOrderSum += detailBean.getFloat("stockProductAmmount");
+			stockProduct.setStockOrder(stockOrder);
+			stockProductService.save(stockProduct);
+			stockOrder.getStockProduct().add(stockProduct);
 		}
-		
-		if(root!=null) {
-			String stockOrderNumber = root.getString("stockOrderNumber");
-			System.out.println(stockOrderNumber);
-			if(stockOrderNumber!=null) {
-				stockOrder.setStockOrderNumber(stockOrderNumber);
-			}		
-			stockOrder.setUserName(root.getString("userName"));
-			stockOrder.setPhoneNumber(root.getString("phoneNumber"));
-			stockOrder.setStockOrderStatus(StockOrderStatus.ORIGINAL);
-			stockOrder.setAddress(root.getString("address"));
-			stockOrder.setCreateTime(new Date());
-			stockOrder.setStockOrderSum(stockOrderSum);
-			stockOrderService.save(stockOrder);
-		}
+		stockOrder.setStockOrderSum(stockOrderSum);
+		stockOrderService.save(stockOrder);
 	}
 }

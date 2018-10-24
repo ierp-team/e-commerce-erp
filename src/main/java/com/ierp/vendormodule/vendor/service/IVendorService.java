@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.ierp.permissionmodule.user.domain.User;
 import com.ierp.vendormodule.vendor.domain.Vendor;
+import com.ierp.vendormodule.vendor.domain.VendorDTO;
 
 
 public interface IVendorService {
@@ -19,5 +21,6 @@ public interface IVendorService {
 	public void deleteAll(Long[] ids);
 	public Vendor findByVendorName(String vendorName);
 	public List<Vendor> getList();
-	public Page<Vendor> findAll(Specification<Vendor> spec, Pageable pageable);
+	public Vendor findByUser(User user);
+	public Page<VendorDTO> findAll(Specification<Vendor> spec, Pageable pageable);
 }

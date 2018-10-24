@@ -24,7 +24,7 @@ public class UpPic {
     	    {
     	    	if ("GIF".equals(type.toUpperCase())||"PNG".equals(type.toUpperCase())||"JPG".equals(type.toUpperCase())) {
     	    		 // 项目在容器中实际发布运行的根路径
-    	    		String realPath=request.getSession().getServletContext().getRealPath("/")+"Admin\\resources\\images\\pictures\\";
+    	    		String realPath=request.getSession().getServletContext().getRealPath("/")+"Admin\\resources\\images\\";
     	    		 // 自定义的文件名称
     	    		
     	    		File md=new File(realPath);

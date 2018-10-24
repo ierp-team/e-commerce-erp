@@ -32,8 +32,9 @@ public class StockProductController {
 	
 	@GetMapping
 	public Page<StockProductDisplayDTO> getPage(Long stockOrderId, StockProductQueryDTO stockProductQueryDTO, ExtjsPageRequest pageRequest){
+		System.out.println(stockOrderId);
 		if(null != stockOrderId) {
-			stockProductQueryDTO.setStockOrder((stockOrderService.findById(stockOrderId)).get());
+			stockProductQueryDTO.setStockOrder(stockOrderService.findById(stockOrderId).get());
 		}
 		return stockProductService.findAll(stockProductQueryDTO.getWhereClause(stockProductQueryDTO), pageRequest.getPageable());
 	}

@@ -10,12 +10,14 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.ierp.vendormodule.product.domain.Product;
+import com.ierp.permissionmodule.user.domain.User;
 import com.ierp.vendormodule.vendor.domain.Vendor;
+import com.ierp.vendormodule.vendor.domain.VendorDTO;
 import com.ierp.vendormodule.vendor.repository.VendorRepository;
 
 @Service
@@ -60,8 +62,19 @@ public class VendorService implements IVendorService{
 	}
 
 	@Override
-	public Page<Vendor> findAll(Specification<Vendor> spec, Pageable pageable) {
-		return vendorRepository.findAll(spec, pageable);
+	public Page<VendorDTO> findAll(Specification<Vendor> spec, Pageable pageable) {
+		Page<Vendor> entityPage = vendorRepository.findAll(spec, pageable);
+		List<Vendor> entityLists = entityPage.getContent();
+		List<VendorDTO> dtoLists = null;
+		if(entityLists!=null) {
+			dtoLists = new ArrayList<VendorDTO>();
+			for(Vendor entity : entityLists) {
+				VendorDTO dto = new VendorDTO();
+				VendorDTO.entityToDto(entity, dto);
+				dtoLists.add(dto);
+			}
+		}
+		return new PageImpl<VendorDTO>(dtoLists, pageable, entityPage.getTotalElements());	
 	}
 
 	public Vendor findByVendorName(String vendorName) {
@@ -76,5 +89,10 @@ public class VendorService implements IVendorService{
 			list.add(iter.next());
 		}
 		return list;
+	}
+
+	@Override
+	public Vendor findByUser(User user) {
+		return vendorRepository.findByUser(user);
 	}
 }

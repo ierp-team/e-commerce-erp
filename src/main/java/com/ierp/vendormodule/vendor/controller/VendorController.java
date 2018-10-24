@@ -38,9 +38,12 @@ public class VendorController {
 	
 	@Autowired
 	private IVendorService vendorService;
+
+//	private Page<VendorDTO> findAll;
 	
 	@GetMapping
-	public Page<Vendor> getPage(VendorQueryDTO vendorQueryDTO , ExtjsPageRequest pageRequest){
+	public Page<VendorDTO> getPage(VendorQueryDTO vendorQueryDTO , ExtjsPageRequest pageRequest){
+//		findAll = vendorService.findAll(VendorQueryDTO.getWhereClause(vendorQueryDTO), pageRequest.getPageable());
 		return vendorService.findAll(VendorQueryDTO.getWhereClause(vendorQueryDTO), pageRequest.getPageable());
 	}
 	
@@ -82,7 +85,7 @@ public class VendorController {
 	}
 	
 	@PutMapping(value="{vendorId}",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse update(@PathVariable("vendorId") Long myId,@RequestBody Vendor dto) 
+	public ExtAjaxResponse update(@PathVariable("vendorId") Long myId,@RequestBody VendorDTO dto) 
 	{
 		try {
 			Vendor entity = vendorService.findById(myId).get();
@@ -100,21 +103,24 @@ public class VendorController {
 	public ExtAjaxResponse save(@RequestBody VendorDTO vendordto) 
 	{
 		try {
-			if(vendorService.findByVendorName(vendordto.getVendorName())==null) {
 				User user = new User();
 				user.setId(vendordto.getVendorAccount());
+				System.out.println(user.getId());
 				user.setPassword(vendordto.getVendorPassword());
-				Group group = groupService.findById("suplier").get();
-				user.getGroup().add(group);
+				System.out.println(user.getPassword());
+				if(groupService.findById("suplier").isPresent()) {
+					Group group = groupService.findById("supplier").get();
+					user.getGroup().add(group);
+				}
 				userService.save(user);
 				Vendor entity = new Vendor();
 				vendordto.dtoToEntity(vendordto, entity);
 				entity.setUser(user);
 				vendorService.save(entity);
 				return new ExtAjaxResponse(true,"保存成功！");
-			}else
-				return new ExtAjaxResponse(true,"保存失败！");
+			
 		} catch (Exception e) {
+			System.out.println(e.toString());
 			return new ExtAjaxResponse(true,"保存失败！");
 		}
 	}
