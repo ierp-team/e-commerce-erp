@@ -35,8 +35,10 @@ public class StockProductController {
 		System.out.println(stockOrderId);
 		if(null != stockOrderId) {
 			stockProductQueryDTO.setStockOrder(stockOrderService.findById(stockOrderId).get());
+
 		}
-		return stockProductService.findAll(stockProductQueryDTO.getWhereClause(stockProductQueryDTO), pageRequest.getPageable());
+//		System.out.println(stockProductQueryDTO.getStockOrder().getStockOrderNumber());
+		return stockProductService.findAll(StockProductQueryDTO.getWhereClause(stockProductQueryDTO), pageRequest.getPageable());
 	}
 	
 	@GetMapping(value="{stockProductId}")

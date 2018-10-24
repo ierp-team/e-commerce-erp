@@ -42,8 +42,8 @@ public class ProductController {
 	@GetMapping
 	public Page<ProductDisplayDTO> getPage(HttpSession session, Long vendorId, ProductQueryDTO productQueryDTO , ExtjsPageRequest pageRequest){
 		
-		String userId = SessionUtil.getUserName(session);
-		productQueryDTO.setUserId(userId);
+//		String userId = SessionUtil.getUserName(session);
+//		productQueryDTO.setUserId(userId);
 		if(null!=vendorId) {
 			productQueryDTO.setVendor(vendorService.findById(vendorId).get());
 		}
