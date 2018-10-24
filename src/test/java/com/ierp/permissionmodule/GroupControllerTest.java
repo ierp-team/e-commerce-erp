@@ -32,29 +32,34 @@ public class GroupControllerTest {
 //            g2.setName("管理员");
 //            g2.setType("可以查看所有模块");
             
-            Group g3 = new Group();
-            g3.setGroupName("salesperson");
-            g3.setName("采购人员");
-            g3.setType("可以查看采购模块");
-            
-            Group g4 = new Group();
-            g4.setGroupName("procurementStaff");
-            g4.setName("销售人员");
-            g4.setType("可以查看订单模块、物流模块");
-            
-            Group g5 = new Group();
-            g5.setGroupName("warehouseStaff");
-            g5.setName("仓库人员");
-            g5.setType("可以查看……？");
+//            Group g3 = new Group();
+//            g3.setGroupName("salesperson");
+//            g3.setName("采购人员");
+//            g3.setType("可以查看采购模块");
+//            
+//            Group g4 = new Group();
+//            g4.setGroupName("procurementStaff");
+//            g4.setName("销售人员");
+//            g4.setType("可以查看订单模块、物流模块");
+//            
+//            Group g5 = new Group();
+//            g5.setGroupName("warehouseStaff");
+//            g5.setName("仓库人员");
+//            g5.setType("可以查看……？");
+			
+			Group g6 = new Group();
+			g6.setGroupName("supplier");
+			g6.setName("供应商");
+			groupService.save(g6);
             
             //groupService.save(g1);
-            groupService.save(g5);
+//            groupService.save(g5);
             
-            List<Group> entityLists = new ArrayList<Group>();
+//            List<Group> entityLists = new ArrayList<Group>();
             //entityLists.add(g2);
-            entityLists.add(g3);
-            entityLists.add(g4);
-            groupService.saveAll(entityLists);
+//            entityLists.add(g3);
+//            entityLists.add(g4);
+//            groupService.saveAll(entityLists);
             System.out.print("操作失败");
 		}catch (Exception e) {
             e.printStackTrace();
