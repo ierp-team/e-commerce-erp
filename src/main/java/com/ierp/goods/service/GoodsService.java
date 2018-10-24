@@ -41,12 +41,14 @@ public class GoodsService implements IGoodsService {
 		try {
 			Goods entity = new Goods();
 			GoodsDTO.dtoToEntity(dto, entity);
-			
-			Vendor vendor = vendorService.findById(dto.getVendorId()).get();
-			if (null!=vendor) {
-				entity.setVendor(vendor);
+			if(null!=dto.getVendorId()) {
+				Vendor vendor = vendorService.findById(dto.getVendorId()).get();	//通过供应商id找到供应商
+				if (null!=vendor) {
+					entity.setVendor(vendor);	//设置供应商
+					entity.setGoodsCode(vendor.getVendorId()+"-"+dto.getGoodsUuid());	//生成商品编码 默认为 "供应商id"-"uuid"
+				}
 			}
-			
+			else entity.setGoodsCode(dto.getGoodsUuid());	//若无设置供应商，商品编码为 uuid
 			return goodsRepository.save(entity);
 		} catch(Exception e) {
 			return null;
@@ -57,14 +59,13 @@ public class GoodsService implements IGoodsService {
 	public Goods update(GoodsDTO dto) {
 		try {
 			Goods entity= findById(dto.getId()).get();
-			
 			BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
-			
-			Vendor vendor = vendorService.findById(dto.getVendorId()).get();
-			if (null!=vendor) {
-				entity.setVendor(vendor);
+			if(null!=dto.getVendorId()) {
+				Vendor vendor = vendorService.findById(dto.getVendorId()).get();
+				if (null!=vendor) {
+					entity.setVendor(vendor);
+				}
 			}
-			
 			return goodsRepository.save(entity);
 		} catch(Exception e) {
 			return null;

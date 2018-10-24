@@ -48,12 +48,19 @@ public class GoodsController {
 		}
 	}
 	
-	@PutMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody GoodsDTO dto) {
+	@PostMapping(value="/update")
+	public ExtAjaxResponse update(GoodsDTO dto, MultipartFile photoFile, HttpServletRequest request) {
 		try {
-			Goods entity = goodsService.findById(id).get();
+			String goodsPhoto = null;
+			Goods entity = goodsService.findById(dto.getId()).get();
 			if(entity!=null) {
 				//BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
+				if (photoFile.isEmpty()) {
+					goodsPhoto = entity.getGoodsPhoto();
+				} else {
+					goodsPhoto = PhotoUploadUtils.UpAndgetPath(photoFile, request);
+				}
+				dto.setGoodsPhoto(goodsPhoto);
 				goodsService.update(dto);
 				return new ExtAjaxResponse(true,"保存成功！");
 			} else {
@@ -63,6 +70,22 @@ public class GoodsController {
 			return new ExtAjaxResponse(true,"保存失败！");
 		}
 	}
+	
+//	@PutMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE)
+//	public ExtAjaxResponse update(@PathVariable("id") Long id,@RequestBody GoodsDTO dto) {
+//		try {
+//			Goods entity = goodsService.findById(id).get();
+//			if(entity!=null) {
+//				//BeanUtils.copyProperties(dto, entity);//使用自定义的BeanUtils
+//				goodsService.update(dto);
+//				return new ExtAjaxResponse(true,"保存成功！");
+//			} else {
+//				return new ExtAjaxResponse(true,"保存失败！");
+//			}
+//		} catch(Exception e) {
+//			return new ExtAjaxResponse(true,"保存失败！");
+//		}
+//	}
 	
 	@DeleteMapping(value="{id}")
 	public ExtAjaxResponse delete(@PathVariable("id") Long id) {
@@ -101,7 +124,6 @@ public class GoodsController {
     public List<Goods> getList() {
         return goodsService.findAll();
     }
-    
 	
 	@GetMapping
 	public Page<GoodsDTO> getPage(GoodsQueryDTO goodsQueryDTO , ExtjsPageRequest pageRequest) {

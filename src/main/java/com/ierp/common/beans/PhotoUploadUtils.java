@@ -22,13 +22,13 @@ public class PhotoUploadUtils {
 			if (type!=null) {
 				if ("GIF".equals(type.toUpperCase())||"PNG".equals(type.toUpperCase())||"JPG".equals(type.toUpperCase())) {
 				// 项目在容器中实际发布运行的根路径
-				String realPath=request.getSession().getServletContext().getRealPath("/")+"Admin\\resources\\images\\goods-picture\\";
+				String realPath=request.getSession().getServletContext().getRealPath("/")+"Admin\\resources\\images\\";
 				// 自定义的文件名称
 				File md=new File(realPath);
 				if (!md.exists()) {
 					md.mkdir();
 				}
-				String trueFileName=String.valueOf(System.currentTimeMillis())+fileName;
+				String trueFileName=String.valueOf(System.currentTimeMillis());
 				 // 设置存放图片文件的路径
 				path=realPath+trueFileName;
 				System.out.println("存放图片文件的路径:"+path);
