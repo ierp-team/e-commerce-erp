@@ -23,7 +23,7 @@ public class Product {
 	private String productPic;	  //图片路径
 	private String productSpec;  //规格
 	private String productUuid;  //唯一识别号
-//	private String productStatus;//状态  1.存货  2.缺货  3.下架
+	private ProductStatus productStatus;//状态  1.存货  2.缺货  3.下架
 	private Integer productStock; //库存
 	
 	@Id
@@ -63,9 +63,9 @@ public class Product {
 		return productUuid;
 	}
 
-//	public String getProductStatus() {
-//		return productStatus;
-//	}
+	public ProductStatus getProductStatus() {
+		return productStatus;
+	}
 
 	public Integer getProductStock() {
 		return productStock;
@@ -105,9 +105,9 @@ public class Product {
 		this.productUuid = productUuid;
 	}
 	
-//	public void setProductStatus(String productStatus) {
-//		this.productStatus = productStatus;
-//	}
+	public void setProductStatus(ProductStatus productStatus) {
+		this.productStatus = productStatus;
+	}
 	
 	public void setProductStock(Integer productStock) {
 		this.productStock = productStock;

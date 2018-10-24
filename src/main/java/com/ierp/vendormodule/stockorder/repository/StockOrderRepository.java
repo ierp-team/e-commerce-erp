@@ -9,5 +9,6 @@ import com.ierp.vendormodule.stockorder.domain.StockOrder;
 public interface StockOrderRepository extends PagingAndSortingRepository<StockOrder, Long>//分页和排序
 ,JpaSpecificationExecutor<StockOrder>{
 
-
+	@Query
+	StockOrder findByStockOrderNumber(String stockOrderNumber);
 }
