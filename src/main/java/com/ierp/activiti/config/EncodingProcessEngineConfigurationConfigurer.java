@@ -8,6 +8,7 @@ public class EncodingProcessEngineConfigurationConfigurer implements ProcessEngi
         processEngineConfiguration.setActivityFontName("宋体");
         processEngineConfiguration.setLabelFontName("宋体");
         processEngineConfiguration.setAnnotationFontName("宋体");
+        
         //SpringProcessEngineConfiguration类为spring boot默认使用的流程引擎配置类。设置后重新部署流程即可
     }
 }
